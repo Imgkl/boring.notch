@@ -1,5 +1,5 @@
     //
-    //  BoringViewModel.swift
+    //  BoringNotch.swift
     //  boringNotch
     //
     //  Created by Harsh Vardhan  Goswami  on 04/08/24.

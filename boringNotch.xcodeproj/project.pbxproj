@@ -15,6 +15,10 @@
 		14A7E5882C64A89C008C1BE9 /* HelloAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E5872C64A89C008C1BE9 /* HelloAnimation.swift */; };
 		14A7E5952C65FA12008C1BE9 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E5942C65FA12008C1BE9 /* AudioPlayer.swift */; };
 		14A7E5972C65FD31008C1BE9 /* boring.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 14A7E5962C65FD31008C1BE9 /* boring.m4a */; };
+		14A7E56A2C63CCE7008C1BE9 /* SystemDownloadObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E5682C63CCE7008C1BE9 /* SystemDownloadObserver.swift */; };
+		14A7E57F2C64003E008C1BE9 /* SafariDownloadObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E57E2C64003E008C1BE9 /* SafariDownloadObserver.swift */; };
+		14A7E5812C640077008C1BE9 /* DownloadPlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E5802C640077008C1BE9 /* DownloadPlist.swift */; };
+		14A7E5832C64169C008C1BE9 /* FilePermissionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14A7E5822C64169C008C1BE9 /* FilePermissionsManager.swift */; };
 		14CEF4162C5CAED300855D72 /* boringNotchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CEF4152C5CAED300855D72 /* boringNotchApp.swift */; };
 		14CEF4182C5CAED300855D72 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CEF4172C5CAED300855D72 /* ContentView.swift */; };
 		14CEF41A2C5CAED400855D72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14CEF4192C5CAED400855D72 /* Assets.xcassets */; };
@@ -60,6 +64,10 @@
 		147163992C5D35FF0068B555 /* MusicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicManager.swift; sourceTree = "<group>"; };
 		1471639E2C5D368B0068B555 /* BoringNotch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoringNotch.swift; sourceTree = "<group>"; };
 		1471A8582C6281BD0058408D /* BoringNotchWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoringNotchWindow.swift; sourceTree = "<group>"; };
+		14A7E5682C63CCE7008C1BE9 /* SystemDownloadObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemDownloadObserver.swift; sourceTree = "<group>"; };
+		14A7E57E2C64003E008C1BE9 /* SafariDownloadObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariDownloadObserver.swift; sourceTree = "<group>"; };
+		14A7E5802C640077008C1BE9 /* DownloadPlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadPlist.swift; sourceTree = "<group>"; };
+		14A7E5822C64169C008C1BE9 /* FilePermissionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePermissionsManager.swift; sourceTree = "<group>"; };
 		14A7E5872C64A89C008C1BE9 /* HelloAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloAnimation.swift; sourceTree = "<group>"; };
 		14A7E5942C65FA12008C1BE9 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		14A7E5962C65FD31008C1BE9 /* boring.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = boring.m4a; sourceTree = "<group>"; };
@@ -157,6 +165,7 @@
 			children = (
 				14D570BD2C5EA0270011E668 /* PlaybackManager.swift */,
 				147163992C5D35FF0068B555 /* MusicManager.swift */,
+				14A7E5822C64169C008C1BE9 /* FilePermissionsManager.swift */,
 			);
 			path = managers;
 			sourceTree = "<group>";
@@ -174,6 +183,16 @@
 				14A7E5942C65FA12008C1BE9 /* AudioPlayer.swift */,
 			);
 			path = helpers;
+			sourceTree = "<group>";
+		};
+		14A7E5692C63CCE7008C1BE9 /* observers */ = {
+			isa = PBXGroup;
+			children = (
+				14A7E5682C63CCE7008C1BE9 /* SystemDownloadObserver.swift */,
+				14A7E57E2C64003E008C1BE9 /* SafariDownloadObserver.swift */,
+				14A7E5802C640077008C1BE9 /* DownloadPlist.swift */,
+			);
+			path = observers;
 			sourceTree = "<group>";
 		};
 		14CEF4092C5CAED200855D72 = {
@@ -199,6 +218,7 @@
 				14A7E5962C65FD31008C1BE9 /* boring.m4a */,
 				14A7E5932C65FA06008C1BE9 /* helpers */,
 				14A7E58C2C656A5D008C1BE9 /* observers */,
+				14A7E5692C63CCE7008C1BE9 /* observers */,
 				1443E7F42C609E650027C1FC /* Info.plist */,
 				1443E7F12C609DB90027C1FC /* sizing */,
 				14D570D32C5F70FA0011E668 /* strings */,
@@ -389,14 +409,18 @@
 				14D570D52C5F710B0011E668 /* constants.swift in Sources */,
 				1471A8592C6281BD0058408D /* BoringNotchWindow.swift in Sources */,
 				1471639F2C5D368B0068B555 /* BoringNotch.swift in Sources */,
+				14A7E57F2C64003E008C1BE9 /* SafariDownloadObserver.swift in Sources */,
 				14CEF4182C5CAED300855D72 /* ContentView.swift in Sources */,
 				14D570B62C5E961A0011E668 /* NotchShape.swift in Sources */,
+				14A7E56A2C63CCE7008C1BE9 /* SystemDownloadObserver.swift in Sources */,
 				B10F849F2C6B5BCC009F3026 /* NotchContentView.swift in Sources */,
 				14CEF4162C5CAED300855D72 /* boringNotchApp.swift in Sources */,
 				B17266DF2C64DFA00031BA0D /* BundleInfos.swift in Sources */,
 				14D570C22C5EAFBF0011E668 /* EmptyState.swift in Sources */,
 				B15063522C63D41A00EBB0E3 /* Image2Color.swift in Sources */,
 				14D570D22C5F6C6A0011E668 /* BoringExtrasMenu.swift in Sources */,
+				14A7E5832C64169C008C1BE9 /* FilePermissionsManager.swift in Sources */,
+				14A7E5812C640077008C1BE9 /* DownloadPlist.swift in Sources */,
 				B15063542C63E18700EBB0E3 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -546,12 +570,14 @@
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "To show current playing audio in the app";
 				INFOPLIST_KEY_NSDownloadsFolderUsageDescription = "To show current download file";
+				INFOPLIST_KEY_NSDownloadsFolderUsageDescription = "To show current download file";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.5;
 				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = electronlabsdev.boringNotch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -586,6 +612,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSDownloadsFolderUsageDescription = "To show current download file";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "To show current playing audio in the app";
 				INFOPLIST_KEY_NSDownloadsFolderUsageDescription = "To show current download file";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -595,6 +622,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = electronlabsdev.boringNotch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
