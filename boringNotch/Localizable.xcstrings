@@ -121,6 +121,9 @@
         }
       }
     },
+    "By doing this, we can quickly address global bugs. It will be enabled later on." : {
+
+    },
     "Charging" : {
       "localizations" : {
         "en" : {
@@ -539,6 +542,9 @@
       }
     },
     "What's New" : {
+
+    },
+    "Your settings will not be restored on restart" : {
 
     }
   },

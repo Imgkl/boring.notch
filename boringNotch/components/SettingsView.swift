@@ -50,6 +50,8 @@ struct SettingsView: View {
     @ViewBuilder
     func GeneralSettings() -> some View {
         Form {
+            nonSavingSettingsBadge()
+            
             Section {
                 HStack() {
                     ForEach(accentColors, id: \.self) { color in
@@ -327,5 +329,22 @@ struct SettingsView: View {
             .padding(.horizontal, 6)
             .background(Color(nsColor: .secondarySystemFill))
             .clipShape(.capsule)
+    }
+    
+    func nonSavingSettingsBadge() -> some View {
+        Section {
+            HStack(spacing: 12) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 22))
+                    .foregroundStyle(.yellow)
+                VStack(alignment: .leading) {
+                    Text("Your settings will not be restored on restart")
+                        .font(.headline)
+                    Text("By doing this, we can quickly address global bugs. It will be enabled later on.")
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+            }
+        }
     }
 }
