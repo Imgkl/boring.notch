@@ -188,6 +188,7 @@ struct SettingsView: View {
         Form {
             Section {
                 Toggle("Enable colored spectrograms", isOn: $vm.coloredSpectrogram.animation())
+                Toggle("Enable sneak peek", isOn: $vm.enableSneakPeek)
                 HStack {
                     Stepper(value: $vm.waitInterval, in: 0...10, step: 1) {
                         HStack {

@@ -153,7 +153,7 @@ class MusicManager: ObservableObject {
                 self.lastUpdated = Date()
             }
             
-            if self.isPlaying && self.albumArtData != nil {
+            if self.isPlaying && self.albumArtData != nil && vm.enableSneakPeek {
                 self.vm.toggleSneakPeak(status: true, type: SneakContentType.music)
             }
             
