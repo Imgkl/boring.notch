@@ -16,7 +16,6 @@
 		14288DE52C6E016F00B9F80C /* SystemDownloadObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288DE02C6E016F00B9F80C /* SystemDownloadObserver.swift */; };
 		14288DE62C6E016F00B9F80C /* VolumeChangeListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288DE12C6E016F00B9F80C /* VolumeChangeListener.swift */; };
 		14288DE82C6E01C800B9F80C /* ProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288DE72C6E01C800B9F80C /* ProgressIndicator.swift */; };
-		14288DE92C6E020600B9F80C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14D031ED2C689DB70096E6A1 /* IOKit.framework */; };
 		14288DEE2C6E020900B9F80C /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14D031EF2C689DC00096E6A1 /* ApplicationServices.framework */; };
 		14288DF52C6E7BF500B9F80C /* OSDUIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288DF42C6E7BF500B9F80C /* OSDUIManager.swift */; };
 		14288DF72C6E956200B9F80C /* DisplayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288DF62C6E956200B9F80C /* DisplayManager.swift */; };
@@ -26,7 +25,6 @@
 		14288E002C6E9F4500B9F80C /* MicrophoneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288DFF2C6E9F4500B9F80C /* MicrophoneManager.swift */; };
 		14288E022C6EA62600B9F80C /* ClipboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E012C6EA62600B9F80C /* ClipboardView.swift */; };
 		14288E062C6EB6F400B9F80C /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E052C6EB6F400B9F80C /* ClipboardManager.swift */; };
-		14288E072C6F267B00B9F80C /* CoreBrightness.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14D032162C68F2D90096E6A1 /* CoreBrightness.framework */; };
 		14288E0A2C6F34AC00B9F80C /* KeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E092C6F34AC00B9F80C /* KeyCode.swift */; };
 		1443E7F32C609DCE0027C1FC /* matters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1443E7F22C609DCE0027C1FC /* matters.swift */; };
 		147163982C5D35B70068B555 /* MusicVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163972C5D35B70068B555 /* MusicVisualizer.swift */; };
@@ -159,8 +157,6 @@
 				14288DEE2C6E020900B9F80C /* ApplicationServices.framework in Frameworks */,
 				14D0321D2C68F3350096E6A1 /* Sparkle in Frameworks */,
 				14D0321A2C68F32E0096E6A1 /* LaunchAtLogin in Frameworks */,
-				14F1DE472C6A9AF6005671BF /* IOKit.framework in Frameworks */,
-				14F1DE422C6A9AED005671BF /* CoreBrightness.framework in Frameworks */,
 				B18654392C6F4990000B926A /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -543,7 +539,6 @@
 				14D570C42C5EBE170011E668 /* BuyMeCoffee.swift in Sources */,
 				B1B1128F2C6A56E800093D8F /* DynamicNotch.swift in Sources */,
 				B1CE8CFE2C6F659400DD9871 /* KeyboardShortcutsHelper.swift in Sources */,
-				14A7E5952C65FA12008C1BE9 /* AudioPlayer.swift in Sources */,
 				14D570C62C5F38210011E668 /* BoringHeader.swift in Sources */,
 				B17266E32C65F7FB0031BA0D /* WhatsNewView.swift in Sources */,
 				14D570CD2C5F4BB70011E668 /* BoringBattery.swift in Sources */,
@@ -708,7 +703,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "1.9+1";
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = 342QMGS27Q;
+				DEVELOPMENT_TEAM = JPWMG84CH8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -750,7 +745,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "1.9+1";
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = 342QMGS27Q;
+				DEVELOPMENT_TEAM = JPWMG84CH8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

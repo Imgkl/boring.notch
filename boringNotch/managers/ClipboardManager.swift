@@ -27,6 +27,16 @@ class ClipboardManager {
         startMonitoring()
     }
     
+    func clearHistory() {
+        clipboardItems.removeAll()
+        saveClipboardItems()
+    }
+    
+    func copyItem(_ item: String) {
+        clipboard.clearContents()
+        clipboard.setString(item, forType: .string)
+    }
+    
     func startMonitoring() {
         
         eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .keyDown]) { [weak self] event in
@@ -79,7 +89,6 @@ class ClipboardManager {
         }
     }
     
-        // Save clipboard items to .plist file
     private func saveClipboardItems() {
         let plistPath = getPlistPath()
         let plistArray = clipboardItems as NSArray
@@ -94,7 +103,7 @@ class ClipboardManager {
         }
     }
     
-     // Get the path for the .plist file
+        // Get the path for the .plist file
     private func getPlistPath() -> String {
         let fileManager = FileManager.default
         let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first

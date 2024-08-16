@@ -8,68 +8,70 @@
 import Foundation
 import SwiftUI
 
-struct ClipboardItem: Identifiable {
-    var id = UUID()
-    var text: String
-}
 
-struct ClipboardItemView: View {
-    var item: ClipboardItem
-    @State var showCopyButton: Bool = false
-    
+struct ClipboardItemUI: View {
+    let content: String
+    let onClick: () -> Void
     var body: some View {
-        Button(action:{}){
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 4)
-                    .stroke(Color(red: 36/255, green: 36/255, blue: 36/255), lineWidth: 0.5)
-                    .background(RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(red: 20/255, green: 20/255, blue: 20/255))
-                    )
-                    .frame(height: 16)
-                HStack{
-                    Text(item.text).font(.system(size: 6, weight: .regular)).lineLimit(1).padding(.leading, 5)
-                    Spacer()
-                    if showCopyButton {
-                        Button(action: {}){
-                            Image(systemName: "doc.on.doc").font(.system(size: 6, weight: .bold))
-                        }.buttonStyle(PlainButtonStyle()).padding(.trailing, 5)
-                    }
-                }
-            }
-        }.buttonStyle(PlainButtonStyle()).onHover(perform: { hovering in
-            if hovering {
-                self.showCopyButton = true
-            } else {
-                self.showCopyButton = false
-            }
-        })
+        Button(action: onClick){
+            Text(content)
+                .frame(width: (NSScreen.main?.frame.size.width ?? 1800) / 6)
+                .frame(maxHeight: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.black.opacity(0.08))
+                        .strokeBorder(Color(nsColor: .textColor).opacity(0.08))
+                )
+        }.buttonStyle(PlainButtonStyle())
     }
 }
 
 struct ClipboardView: View {
     var clipboardManager: ClipboardManager
     var body: some View {
-        VStack(spacing: 6) {
-            HStack {
-                Text("Clipboard history")
-                    .font(.system(size: 8, weight: .regular))
+        VStack(spacing: 0) {
+            HStack(spacing: 10) {
+                
                 Spacer()
-                Button(action: {}){
-                    Image(systemName: "chevron.right").font(.system(size: 8, weight: .bold))
-                }.buttonStyle(PlainButtonStyle())
-            }
-            ScrollView(.vertical) {
-                LazyVStack(spacing: 2) {
-                    ForEach(0..<clipboardManager.clipboardItems.count, id: \.self) {item in
-                        ClipboardItemView(item: ClipboardItem(text: clipboardManager.clipboardItems[
-                            item
-                        ]))
+                
+                Group {
+                    Button {self.clipboardManager.clearHistory()} label: {
+                        Label("Clear all", systemImage: "trash")
+                            .padding(.horizontal, 8)
                     }
+                    SettingsLink(label: {
+                        Label("Settings", systemImage: "gear")
+                            .padding(.horizontal, 8)
+                    })
+                }
+                .controlSize(.extraLarge)
+                .buttonStyle(AccessoryBarButtonStyle())
+            }
+            .padding()
+            Group {
+                if self.clipboardManager.clipboardItems.count == 0 {
+                    ContentUnavailableView("Clipboard history is empty",
+                                           systemImage: "clipboard",
+                                           description: Text("Keep using the app and your copied content will be shown here"))
+                } else {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 20) {
+                            ForEach(0..<self.clipboardManager.clipboardItems.count, id: \.self) { index in
+                                ClipboardItemUI(content: self.clipboardManager.clipboardItems[index], onClick: {
+                                    clipboardManager.copyItem(self.clipboardManager.clipboardItems[index])
+                                })
+                                .padding(.leading, index == 0 ? nil : 0)
+                            }
+                        }
+                    }
+                    .frame(maxHeight: .infinity)
                 }
             }
-        }.onAppear() {
-            clipboardManager.captureClipboardText()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.bottom)
+            Divider()
         }
+        .background(VisualEffectView(material: .hudWindow, blendingMode: .behindWindow))
     }
 }
 

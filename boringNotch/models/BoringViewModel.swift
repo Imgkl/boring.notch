@@ -120,8 +120,8 @@ class BoringViewModel: NSObject, ObservableObject {
         self.currentView = .music
     }
     
-    func openClipboard(){
-        self.currentView = .clipboard
+    func openClipboard() {
+        self.showCHPanel = true;
     }
     
     func showEmpty() {
