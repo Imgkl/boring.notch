@@ -176,16 +176,16 @@ struct SettingsView: View {
         Form {
             Section {
                 Toggle("Enable HUD replacement", isOn: .constant(false))
-                Toggle("Enable glowing effect", isOn: .constant(true))
-                Toggle("Use accent color", isOn: .constant(false))
+                Toggle("Enable glowing effect", isOn: $vm.systemEventIndicatorShadow.animation())
+                Toggle("Use accent color", isOn: $vm.systemEventIndicatorUseAccent.animation())
                 Toggle("Use album art color during playback", isOn: .constant(false))
+                    .hidden()
             } header: {
                 HStack {
                     Text("Customization")
                     comingSoonTag()
                 }
             }
-            .disabled(true)
         }
     }
     

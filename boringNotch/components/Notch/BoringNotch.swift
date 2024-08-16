@@ -52,7 +52,7 @@ struct BoringNotch: View {
         Rectangle()
             .foregroundColor(.black)
             .mask(NotchShape(cornerRadius: vm.notchState == .open ? vm.sizes.cornerRadius.opened.inset : (vm.sneakPeak.show ? 4 : 0) + vm.sizes.cornerRadius.closed.inset!))
-            .frame(width: calculateNotchWidth(), height: vm.notchState == .open ? (vm.sizes.size.opened.height!) : vm.sizes.size.closed.height! + (hoverAnimation ? 8 : !batteryModel.showChargingInfo && vm.sneakPeak.show ? 25 : 0))
+            .frame(width: calculateNotchWidth(), height: vm.notchState == .open ? (vm.sizes.size.opened.height!) : vm.sizes.size.closed.height! + (hoverAnimation ? 8 : !batteryModel.showChargingInfo && vm.sneakPeak.show ? 35 : 0))
             .animation(notchAnimation, value: batteryModel.showChargingInfo)
             .animation(notchAnimation, value: musicManager.isPlaying)
             .animation(notchAnimation, value: musicManager.lastUpdated)

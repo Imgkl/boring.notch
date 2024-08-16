@@ -169,17 +169,20 @@ struct NotchContentView: View {
                             Spacer()
                         }.foregroundStyle(.gray, .gray).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1))).padding(.horizontal, 4).padding(.vertical, 2)
                     case .volume:
-                        SystemEventIndicatorModifier(eventType: .volume, value: vm.sneakPeak.value, sendEventBack: {
+                        SystemEventIndicatorModifier(eventType: .volume, value: $vm.sneakPeak.value, sendEventBack: {
                             print("Volume changed")
-                        }).padding(.vertical, 4).padding(.horizontal, 4)
+                        })
+                        .transition(.opacity.combined(with: .blurReplace))
+                        .padding([.leading, .top], musicManager.isPlaying ? 4 : 0)
+                        .padding(.trailing, musicManager.isPlaying ? 8 : 4)
                     case .brightness:
                         EmptyView()/*.systemEventIndicator(for: .brightness, value: 0.40).padding(.vertical, 4)*/
                     case .backlight:
                         EmptyView()/*.systemEventIndicator(for: .backlight, value: 0.40).padding(.vertical, 4)*/
                     case .mic:
-                        SystemEventIndicatorModifier(eventType: .mic, value: vm.sneakPeak.value, sendEventBack: {
+                        SystemEventIndicatorModifier(eventType: .mic, value: $vm.sneakPeak.value, sendEventBack: {
                             print("Volume changed")
-                        }).padding(.vertical, 4).padding(.horizontal, 4)
+                        })
                 }
             }
         }
