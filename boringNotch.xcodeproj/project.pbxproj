@@ -27,6 +27,10 @@
 		14288E062C6EB6F400B9F80C /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E052C6EB6F400B9F80C /* ClipboardManager.swift */; };
 		14288E0A2C6F34AC00B9F80C /* KeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E092C6F34AC00B9F80C /* KeyCode.swift */; };
 		14288E0C2C6F8EC000B9F80C /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E0B2C6F8EC000B9F80C /* AppIcons.swift */; };
+		14288E142C6FC9CF00B9F80C /* DisplayServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14288E132C6FC9CF00B9F80C /* DisplayServices.framework */; };
+		14288E182C6FCA3300B9F80C /* CoreDisplay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14288E172C6FCA3300B9F80C /* CoreDisplay.framework */; };
+		14288E192C6FCA3300B9F80C /* CoreDisplay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 14288E172C6FCA3300B9F80C /* CoreDisplay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		14288E1D2C6FCC2500B9F80C /* NSScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E1C2C6FCC2500B9F80C /* NSScreen+Extension.swift */; };
 		1443E7F32C609DCE0027C1FC /* matters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1443E7F22C609DCE0027C1FC /* matters.swift */; };
 		147163982C5D35B70068B555 /* MusicVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163972C5D35B70068B555 /* MusicVisualizer.swift */; };
 		1471639A2C5D35FF0068B555 /* MusicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163992C5D35FF0068B555 /* MusicManager.swift */; };
@@ -75,6 +79,20 @@
 		B1D6FD432C6603730015F173 /* SoftwareUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D6FD422C6603730015F173 /* SoftwareUpdater.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		14288E1A2C6FCA3300B9F80C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				14288E192C6FCA3300B9F80C /* CoreDisplay.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		14288DD02C6E015000B9F80C /* BrightnessControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrightnessControl.h; sourceTree = "<group>"; };
 		14288DD12C6E015000B9F80C /* BrightnessControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessControl.m; sourceTree = "<group>"; };
@@ -99,6 +117,9 @@
 		14288E052C6EB6F400B9F80C /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
 		14288E092C6F34AC00B9F80C /* KeyCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCode.swift; sourceTree = "<group>"; };
 		14288E0B2C6F8EC000B9F80C /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
+		14288E132C6FC9CF00B9F80C /* DisplayServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DisplayServices.framework; path = ../../../../System/Library/PrivateFrameworks/DisplayServices.framework; sourceTree = "<group>"; };
+		14288E172C6FCA3300B9F80C /* CoreDisplay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreDisplay.framework; path = ../../../../System/Library/Frameworks/CoreDisplay.framework; sourceTree = "<group>"; };
+		14288E1C2C6FCC2500B9F80C /* NSScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScreen+Extension.swift"; sourceTree = "<group>"; };
 		1443E7F22C609DCE0027C1FC /* matters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = matters.swift; sourceTree = "<group>"; };
 		1443E7F42C609E650027C1FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		147163972C5D35B70068B555 /* MusicVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicVisualizer.swift; sourceTree = "<group>"; };
@@ -156,9 +177,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14288E182C6FCA3300B9F80C /* CoreDisplay.framework in Frameworks */,
 				14288DEE2C6E020900B9F80C /* ApplicationServices.framework in Frameworks */,
 				14D0321D2C68F3350096E6A1 /* Sparkle in Frameworks */,
 				14D0321A2C68F32E0096E6A1 /* LaunchAtLogin in Frameworks */,
+				14288E142C6FC9CF00B9F80C /* DisplayServices.framework in Frameworks */,
 				B18654392C6F4990000B926A /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,6 +232,13 @@
 				14288DFB2C6E95BF00B9F80C /* SensorMethod.swift */,
 			);
 			path = support;
+			sourceTree = "<group>";
+		};
+		14288E1B2C6FCBF800B9F80C /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		1443E7F12C609DB90027C1FC /* sizing */ = {
@@ -279,6 +309,7 @@
 		14CEF4142C5CAED300855D72 /* boringNotch */ = {
 			isa = PBXGroup;
 			children = (
+				14288E1B2C6FCBF800B9F80C /* New Group */,
 				14288DE22C6E016F00B9F80C /* observers */,
 				14288DD92C6E015000B9F80C /* helpers */,
 				B186543A2C6F49A4000B926A /* Shortcuts */,
@@ -314,6 +345,8 @@
 		14D031EC2C689DB70096E6A1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				14288E172C6FCA3300B9F80C /* CoreDisplay.framework */,
+				14288E132C6FC9CF00B9F80C /* DisplayServices.framework */,
 				14D032162C68F2D90096E6A1 /* CoreBrightness.framework */,
 				14D032142C68F2C10096E6A1 /* CoreBrightness */,
 				14D031EF2C689DC00096E6A1 /* ApplicationServices.framework */,
@@ -366,6 +399,7 @@
 				B1B112922C6A577E00093D8F /* MouseTracker.swift */,
 				B18654352C6F4616000B926A /* ClipboardHistoryWindow.swift */,
 				B1CE8CFD2C6F659400DD9871 /* KeyboardShortcutsHelper.swift */,
+				14288E1C2C6FCC2500B9F80C /* NSScreen+Extension.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -439,6 +473,7 @@
 				14CEF40E2C5CAED300855D72 /* Sources */,
 				14CEF40F2C5CAED300855D72 /* Frameworks */,
 				14CEF4102C5CAED300855D72 /* Resources */,
+				14288E1A2C6FCA3300B9F80C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -524,6 +559,7 @@
 				14D570B92C5E98A20011E668 /* drop.swift in Sources */,
 				14288E062C6EB6F400B9F80C /* ClipboardManager.swift in Sources */,
 				B1C974342C642B6D0000E707 /* MarqueeTextView.swift in Sources */,
+				14288E1D2C6FCC2500B9F80C /* NSScreen+Extension.swift in Sources */,
 				14288DDB2C6E015000B9F80C /* KeyboardManager.m in Sources */,
 				14288DDA2C6E015000B9F80C /* BrightnessControl.m in Sources */,
 				14288DDD2C6E015000B9F80C /* KeyLightManager.swift in Sources */,
@@ -728,6 +764,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = electronlabsdev.boringNotch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "boringNotch/helpers/boringNotch-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -770,6 +807,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = electronlabsdev.boringNotch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "boringNotch/helpers/boringNotch-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

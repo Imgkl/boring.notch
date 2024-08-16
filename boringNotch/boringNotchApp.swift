@@ -1,9 +1,9 @@
-//
-//  boringNotchApp.swift
-//  boringNotchApp
-//
-//  Created by Harsh Vardhan  Goswami  on 02/08/24.
-//
+    //
+    //  boringNotchApp.swift
+    //  boringNotchApp
+    //
+    //  Created by Harsh Vardhan  Goswami  on 02/08/24.
+    //
 
 import SwiftUI
 import AVFoundation
@@ -36,11 +36,11 @@ struct DynamicNotchApp: App {
                 self.appDelegate.vm.openClipboard()
             }
             .keyboardShortcut(KeyboardShortcuts.Name("clipboardHistoryPanel"))
-            #if DEBUG
+#if DEBUG
             .disabled(false)
-            #else
+#else
             .disabled(true)
-            #endif
+#endif
             CheckForUpdatesView(updater: updaterController.updater)
             Divider()
             Button("Quit", role: .destructive) {
@@ -59,6 +59,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var whatsNewWindow: NSWindow?
     var clipboardManager: ClipboardManager?
     var microphoneHandler: MicrophoneHandler!
+    var displayManager: DisplayManager!
+    var keyLightManager: KeyLightManager!
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
@@ -79,6 +81,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         
         OSDUIManager.stop()
+        
+        
+        DisplayManager.setupListener(vm: vm)
         
         clipboardManager = ClipboardManager(vm: vm)
         microphoneHandler = MicrophoneHandler(vm: vm)

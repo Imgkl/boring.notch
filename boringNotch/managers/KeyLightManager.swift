@@ -27,7 +27,7 @@ class KeyLightManager: ObservableObject {
     init() {
         registerService()
         if (self.keyboardHasBacklight()){
-//            KeyboardManager.configure()
+            KeyboardManager.configure()
         }
     }
     
@@ -63,14 +63,13 @@ class KeyLightManager: ObservableObject {
     }
     
     func getBrightness() -> Double {
-//        let currentBrightness = BrightnessControl.getBrightness()
-//        let statusBrightness = currentBrightness > 0.1 ? currentBrightness : self.current_brightness_progress
-//        return Double(statusBrightness)
-        return 0
+        let currentBrightness = BrightnessControl.getBrightness()
+        let statusBrightness = currentBrightness > 0.1 ? currentBrightness : self.current_brightness_progress
+        return Double(statusBrightness)
     }
     
     func setKeyboardBacklight(brightness: Float) {
-//        BrightnessControl.setBrightness(brightness)
+        BrightnessControl.setBrightness(brightness)
         self.current_brightness_progress = brightness
     }
 }

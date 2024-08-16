@@ -10,6 +10,12 @@ import Foundation
 import Combine
 import SwiftUI
 
+var f5Keys: [UInt16] = [
+    0xF708,
+    0x96,
+    0x60
+]
+
 class MicrophoneHandler : ObservableObject {
     
     private var vm: BoringViewModel?
@@ -57,7 +63,7 @@ class MicrophoneHandler : ObservableObject {
         }
         
         hotkeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            if event.modifierFlags.contains(.function) && event.keyCode == self?.hotkey {
+            if event.modifierFlags.contains(.function) && f5Keys.contains(UInt16(event.keyCode)) {
                 self?.toggleMicrophone()
             }
         }

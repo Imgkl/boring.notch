@@ -177,7 +177,12 @@ struct NotchContentView: View {
                         .padding([.leading, .top], musicManager.isPlaying ? 4 : 0)
                         .padding(.trailing, musicManager.isPlaying ? 8 : 4)
                     case .brightness:
-                        EmptyView()/*.systemEventIndicator(for: .brightness, value: 0.40).padding(.vertical, 4)*/
+                        SystemEventIndicatorModifier(eventType: .brightness, value: $vm.sneakPeak.value, sendEventBack: {
+                            print("Volume changed")
+                        })
+                        .transition(.opacity.combined(with: .blurReplace))
+                        .padding([.leading, .top], musicManager.isPlaying ? 4 : 0)
+                        .padding(.trailing, musicManager.isPlaying ? 8 : 4)
                     case .backlight:
                         EmptyView()/*.systemEventIndicator(for: .backlight, value: 0.40).padding(.vertical, 4)*/
                     case .mic:

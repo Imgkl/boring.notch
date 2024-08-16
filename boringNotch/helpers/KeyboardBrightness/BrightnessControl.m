@@ -4,7 +4,7 @@
 @implementation BrightnessControl
 
 + (void)setBrightness:(float)brightness {
-    [KeyboardManager.brightnessClient setBrightness:0.1 forKeyboard:1];
+    [KeyboardManager.brightnessClient setBrightness:brightness forKeyboard:1];
 }
 
 + (float)getBrightness {

@@ -8,6 +8,8 @@ import Foundation
 import Cocoa
 
 class DisplayManager {
+    private static var displayQueue: DispatchQueue?;
+    
     private static var useM1DisplayBrightnessMethod = false
     
     private static var method = SensorMethod.standard
@@ -84,6 +86,39 @@ class DisplayManager {
         return getZeroScreen().visibleFrame
     }
     
+    static func setupListener(vm: BoringViewModel) {
+        pollForBrightnessChanges(vm: vm)
+    }
+    
+    private static func pollForBrightnessChanges(vm: BoringViewModel) {
+        var previousBrightness:Float = -1;
+        if let currentBrightness:Float = try? getDisplayBrightness(){
+            previousBrightness = currentBrightness
+        } else {
+            return;
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            while true {
+                do {
+                    let currentBrightness = try getDisplayBrightness()
+                    if currentBrightness != previousBrightness {
+                        previousBrightness = currentBrightness
+                        DispatchQueue.main.async {
+                            vm.toggleSneakPeak(status: true, type: .brightness, value: CGFloat(currentBrightness))
+                        }
+                        print("Brightness changed to \(currentBrightness)")
+                            // Notify the ViewModel or update the UI as needed
+                    }
+                } catch {
+                    print("Failed to poll brightness: \(error)")
+                }
+                Thread.sleep(forTimeInterval: 0.5)
+            }
+        }
+    }
+    
     static func setDisplayBrightness(_ brightness: Float) throws {
         switch DisplayManager.method {
             case .standard:
@@ -116,11 +151,17 @@ class DisplayManager {
     }
     
     private static func setM1DisplayBrightness(_ brightness: Float) throws {
-        let task = Process()
-        task.launchPath = "/usr/libexec/corebrightnessdiag"
-        task.arguments = ["set", "\(brightness)"]
-        try task.run()
-        task.waitUntilExit()
+        guard brightness >= 0 && brightness <= 1 else {
+            print("Brightness level must be between 0 and 1.")
+            return
+        }
+        
+        displayQueue = DispatchQueue(label: String("displayQueue-\(NSScreen.main!.displayID)"))
+        
+        displayQueue?.sync {
+            DisplayServicesSetBrightness(NSScreen.main!.displayID, brightness)
+            DisplayServicesBrightnessChanged(NSScreen.main!.displayID, Double(brightness))
+        }
     }
     
 }
