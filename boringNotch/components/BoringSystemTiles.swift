@@ -26,13 +26,20 @@ struct SystemItemButton: View {
     }
 }
 
-func lockScreen() {
-    print("Locking screen")
-    let task = Process()
-    task.launchPath = "/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession"
-    task.arguments = ["-suspend"]
-    
-    task.launch()
+func logout() {
+    DispatchQueue.global(qos: .background).async {
+        let appleScript = """
+        tell application "System Events" to log out
+        """
+        
+        var error: NSDictionary?
+        if let scriptObject = NSAppleScript(source: appleScript) {
+            scriptObject.executeAndReturnError(&error)
+            if let error = error {
+                print("Error: \(error)")
+            }
+        }
+    }
 }
 
 struct BoringSystemTiles: View {
@@ -59,7 +66,7 @@ struct BoringSystemTiles: View {
             ItemButton(icon: "mic", onTap: microphoneHandler.toggleMicrophone),
             ItemButton(icon: "sun.max", onTap: {}),
             ItemButton(icon: "keyboard", onTap: {}),
-            ItemButton(icon: "lock", onTap: {}),
+            ItemButton(icon: "lock", onTap: logout),
         ]
         _microphoneHandler = StateObject(wrappedValue: microphoneHandler)
     }
