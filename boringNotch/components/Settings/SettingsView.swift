@@ -178,8 +178,9 @@ struct SettingsView: View {
                 Toggle("Enable HUD replacement", isOn: .constant(false))
                 Toggle("Enable glowing effect", isOn: $vm.systemEventIndicatorShadow.animation())
                 Toggle("Use accent color", isOn: $vm.systemEventIndicatorUseAccent.animation())
-                Toggle("Use album art color during playback", isOn: .constant(false))
-                    .hidden()
+                if false {
+                    Toggle("Use album art color during playback", isOn: .constant(false))
+                }
             } header: {
                 HStack {
                     Text("Customization")

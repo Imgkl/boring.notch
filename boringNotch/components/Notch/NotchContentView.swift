@@ -167,7 +167,8 @@ struct NotchContentView: View {
                                 .lineLimit(1)
                             
                             Spacer()
-                        }.foregroundStyle(.gray, .gray).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1))).padding(.horizontal, 4).padding(.vertical, 2)
+                        }
+                        .foregroundStyle(.gray, .gray).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1))).padding(.horizontal, 4).padding(.vertical, 2)
                     case .volume:
                         SystemEventIndicatorModifier(eventType: .volume, value: $vm.sneakPeak.value, sendEventBack: {
                             print("Volume changed")
