@@ -1,9 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "(%@)" : {
       "localizations" : {
         "en" : {
@@ -21,6 +18,12 @@
 
     },
     "%d%%" : {
+
+    },
+    "%lf" : {
+
+    },
+    "%lld%%" : {
 
     },
     "• Bug fixes" : {
@@ -143,6 +146,9 @@
       }
     },
     "Check for Updates…" : {
+
+    },
+    "Clipboard history" : {
 
     },
     "Close" : {

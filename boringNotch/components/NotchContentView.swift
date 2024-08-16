@@ -11,6 +11,9 @@ struct NotchContentView: View {
     @EnvironmentObject var vm: BoringViewModel
     @EnvironmentObject var musicManager: MusicManager
     @EnvironmentObject var batteryModel: BatteryStatusViewModel
+    @EnvironmentObject var volumeChangeListener: VolumeChangeListener
+    var clipboardManager: ClipboardManager?
+    @StateObject var microphoneHandler: MicrophoneHandler
     
     var body: some View {
         VStack {
@@ -134,9 +137,20 @@ struct NotchContentView: View {
                     if vm.currentView != .menu && vm.notchState == .closed && batteryModel.showChargingInfo {
                         BoringBatteryView(batteryPercentage: batteryModel.batteryPercentage, isPluggedIn: batteryModel.isPluggedIn, batteryWidth: 30)}
                     
-                    if vm.currentView != .menu && !batteryModel.showChargingInfo && (musicManager.isPlaying || !musicManager.isPlayerIdle) {
+                    if vm.notchState == .closed && !batteryModel.showChargingInfo && (musicManager.isPlaying || !musicManager.isPlayerIdle) {
                         MusicVisualizer(avgColor: musicManager.avgColor, isPlaying: musicManager.isPlaying)
                             .frame(width: 30)
+                    }
+                    
+                    if vm.notchState == .open {
+                        if vm.currentView != .clipboard
+                        {
+                            BoringSystemTiles(vm: vm, microphoneHandler:microphoneHandler).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1)))
+                        } else {
+                            ClipboardView(
+                                clipboardManager: clipboardManager!
+                            ).padding().transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1)))
+                        }
                     }
                 }
             }
@@ -154,8 +168,18 @@ struct NotchContentView: View {
                             
                             Spacer()
                         }.foregroundStyle(.gray, .gray).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1))).padding(.horizontal, 4).padding(.vertical, 2)
-                    default:
-                        Text("")
+                    case .volume:
+                        SystemEventIndicatorModifier(eventType: .volume, value: vm.sneakPeak.value, sendEventBack: {
+                            print("Volume changed")
+                        }).padding(.vertical, 4).padding(.horizontal, 4)
+                    case .brightness:
+                        EmptyView()/*.systemEventIndicator(for: .brightness, value: 0.40).padding(.vertical, 4)*/
+                    case .backlight:
+                        EmptyView()/*.systemEventIndicator(for: .backlight, value: 0.40).padding(.vertical, 4)*/
+                    case .mic:
+                        SystemEventIndicatorModifier(eventType: .mic, value: vm.sneakPeak.value, sendEventBack: {
+                            print("Volume changed")
+                        }).padding(.vertical, 4).padding(.horizontal, 4)
                 }
             }
         }
@@ -177,5 +201,5 @@ struct NotchContentView: View {
 }
 
 #Preview {
-    BoringNotch(vm: BoringViewModel(), batteryModel: BatteryStatusViewModel(vm: .init()), onHover: onHover).frame(width: 600, height: 500)
+    BoringNotch(vm: BoringViewModel(), batteryModel: BatteryStatusViewModel(vm: .init()), onHover: onHover, clipboardManager: ClipboardManager(vm: .init()), microphoneHandler: MicrophoneHandler(vm:.init())).frame(width: 600, height: 500)
 }

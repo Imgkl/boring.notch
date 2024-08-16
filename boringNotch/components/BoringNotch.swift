@@ -15,17 +15,23 @@ struct BoringNotch: View {
     @State private var isExpanded = false
     @State var showEmptyState = false
     @StateObject private var musicManager: MusicManager
+    @StateObject private var volumeChangeListener: VolumeChangeListener
     @StateObject var batteryModel: BatteryStatusViewModel
+    private var clipboardManager: ClipboardManager?
+    @StateObject var microphoneHandler: MicrophoneHandler
     @State private var haptics: Bool = false
     
     @State private var hoverStartTime: Date?
     @State private var hoverTimer: Timer?
     @State private var hoverAnimation: Bool = false
     
-    init(vm: BoringViewModel, batteryModel: BatteryStatusViewModel, onHover: @escaping () -> Void) {
+    init(vm: BoringViewModel, batteryModel: BatteryStatusViewModel, onHover: @escaping () -> Void, clipboardManager: ClipboardManager, microphoneHandler: MicrophoneHandler) {
         _vm = StateObject(wrappedValue: vm)
         _musicManager = StateObject(wrappedValue: MusicManager(vm: vm)!)
+        _volumeChangeListener = StateObject(wrappedValue: VolumeChangeListener(vm: vm))
         _batteryModel = StateObject(wrappedValue: batteryModel)
+        self.clipboardManager = clipboardManager
+        _microphoneHandler =  StateObject(wrappedValue: microphoneHandler)
         self.onHover = onHover
     }
     
@@ -54,16 +60,21 @@ struct BoringNotch: View {
             .animation(.smooth, value: vm.firstLaunch)
             .animation(notchAnimation, value: vm.sneakPeak.show)
             .overlay {
-                NotchContentView()
+                NotchContentView(clipboardManager: clipboardManager, microphoneHandler: microphoneHandler)
                     .environmentObject(vm)
                     .environmentObject(musicManager)
                     .environmentObject(batteryModel)
+                    .environmentObject(volumeChangeListener)
             }
             .clipped()
             .onHover { hovering in
                 if hovering {
                     if ((vm.notchState == .closed) && vm.enableHaptics) {
                         haptics.toggle()
+                    }
+                    
+                    if(vm.sneakPeak.show){
+                        return;
                     }
                     startHoverTimer()
                 } else {
@@ -128,5 +139,5 @@ struct BoringNotch: View {
 func onHover(){}
 
 #Preview {
-    BoringNotch(vm: BoringViewModel(), batteryModel: BatteryStatusViewModel(vm: .init()), onHover: onHover).frame(width: 600, height: 500)
+    BoringNotch(vm: BoringViewModel(), batteryModel: BatteryStatusViewModel(vm: .init()), onHover: onHover, clipboardManager: ClipboardManager(vm:.init()), microphoneHandler: MicrophoneHandler(vm:.init())).frame(width: 600, height: 500)
 }

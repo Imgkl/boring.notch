@@ -6,8 +6,11 @@ struct ContentView: View {
     let onHover: () -> Void
     @EnvironmentObject var vm: BoringViewModel
     @StateObject var batteryModel: BatteryStatusViewModel
+    var clipboardManager: ClipboardManager?
+    @StateObject var microphoneHandler: MicrophoneHandler
+    
     var body: some View {
-        BoringNotch(vm: vm, batteryModel: batteryModel, onHover: onHover)
+        BoringNotch(vm: vm, batteryModel: batteryModel, onHover: onHover, clipboardManager: clipboardManager!, microphoneHandler: microphoneHandler)
             .frame(maxWidth: .infinity, maxHeight: Sizes().size.opened.height! + 20, alignment: .top)
             .edgesIgnoringSafeArea(.top)
             .transition(.slide.animation(vm.animation))
@@ -30,13 +33,15 @@ struct ContentView: View {
                     let dn = DynamicNotch(content: EditPanelView())
                     dn.toggle()
                 }
-                #if DEBUG
+#if DEBUG
                 .disabled(false)
-                #else
+#else
                 .disabled(true)
-                #endif
+#endif
                 .keyboardShortcut("E", modifiers: .command)
-            }
+            }.onHover(perform: { hovering in
+                clipboardManager?.captureClipboardText()
+            })
     }
     
 }

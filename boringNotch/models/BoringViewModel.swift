@@ -13,11 +13,13 @@ enum SneakContentType {
     case volume
     case backlight
     case music
+    case mic
 }
 
 struct SneakPeak {
     var show: Bool = false
     var type: SneakContentType = .music
+    var value: CGFloat = 0
 }
 
 class BoringViewModel: NSObject, ObservableObject {
@@ -67,55 +69,70 @@ class BoringViewModel: NSObject, ObservableObject {
             }
         }
     }
-        
-        deinit {
-            destroy()
+    @Published var maxClipboardRecords: Int = 1000;
+    
+    deinit {
+        destroy()
+    }
+    
+    func destroy() {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+    }
+    
+    override
+    init() {
+        self.animation = self.animationLibrary.animation
+        super.init()
+        print("BoringViewModel initialized")
+    }
+    
+    func open(){
+        self.notchState = .open
+    }
+    
+    func toggleSneakPeak(status:Bool, type: SneakContentType, value: CGFloat = 0 ) {
+        if self.sneakPeak.show {
+            withAnimation {
+                self.sneakPeak.show = false;
+            }
         }
-        
-        func destroy() {
-            cancellables.forEach { $0.cancel() }
-            cancellables.removeAll()
-        }
-        
-        
-        override
-        init() {
-            self.animation = self.animationLibrary.animation
-            super.init()
-        }
-        
-        func open(){
-            self.notchState = .open
-        }
-        
-        func toggleSneakPeak(status:Bool, type: SneakContentType){
-            self.sneakPeak.show = status
-            self.sneakPeak.type = type
-        }
-        
-        func close(){
-            self.notchState = .closed
-        }
-        
-        func openMenu(){
-            self.currentView = .menu
-        }
-        
-        func openMusic(){
-            self.currentView = .music
-        }
-        
-        func showEmpty() {
-            self.currentView = .empty
-        }
-        
-        func closeHello() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.2){
-                self.firstLaunch = false;
-                withAnimation(self.animationLibrary.animation){
-                    self.close()
-                }
+        DispatchQueue.main.async {
+            withAnimation{
+                self.sneakPeak.show = status
+                self.sneakPeak.type = type
+                self.sneakPeak.value = value
             }
         }
     }
     
+    func close(){
+        self.notchState = .closed
+    }
+    
+    func openMenu(){
+        self.currentView = .menu
+    }
+    
+    func openMusic(){
+        self.currentView = .music
+    }
+    
+    func openClipboard(){
+        self.currentView = .clipboard
+    }
+    
+    func showEmpty() {
+        self.currentView = .empty
+    }
+    
+    func closeHello() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.2){
+            self.firstLaunch = false;
+            withAnimation(self.animationLibrary.animation){
+                self.close()
+            }
+        }
+    }
+}
+

@@ -27,7 +27,7 @@ public enum NotchViews {
     case empty
     case music
     case menu
-    case weather
+    case clipboard
 }
 
 enum SettingsEnum {

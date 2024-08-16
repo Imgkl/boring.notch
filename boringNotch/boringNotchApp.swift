@@ -47,9 +47,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var sizing: Sizes = Sizes()
     let vm: BoringViewModel = BoringViewModel()
     var whatsNewWindow: NSWindow?
+    var clipboardManager: ClipboardManager?
+    var microphoneHandler: MicrophoneHandler!
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
+    }
+    
+    func appWillTerminate() {
+        NotificationCenter.default.removeObserver(self)
+        OSDUIManager.start()
     }
     
     
@@ -61,12 +68,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             object: nil
         )
         
+        OSDUIManager.stop()
+        
+        clipboardManager = ClipboardManager(vm: vm)
+        microphoneHandler = MicrophoneHandler(vm: vm)
         
         window = BoringNotchWindow(
             contentRect: NSRect(x: 0, y: 0, width: sizing.size.opened.width! + 20, height: sizing.size.opened.height! + 30), styleMask: [.borderless], backing: .buffered, defer: false
         )
         
-        window.contentView = NSHostingView(rootView: ContentView(onHover: adjustWindowPosition, batteryModel: .init(vm: self.vm)).environmentObject(vm))
+        window.contentView = NSHostingView(rootView: ContentView(onHover: adjustWindowPosition, batteryModel: .init(vm: self.vm), clipboardManager: clipboardManager, microphoneHandler: self.microphoneHandler).environmentObject(vm))
         
         adjustWindowPosition()
         
@@ -103,28 +114,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let notchCenterX = screenFrame.frame.width / 2
             let windowX = notchCenterX - windowWidth / 2
             let windowY = screenFrame.frame.height
-
+            
             window.setFrameTopLeftPoint(NSPoint(x: windowX, y: windowY))
         }
     }
     
     func setNotchSize() -> CGSize {
-        // Default notch size, to avoid using optionals
+            // Default notch size, to avoid using optionals
         var notchHeight: CGFloat = 32
         var notchWidth: CGFloat = 185
         
-        // Check if the screen is available
+            // Check if the screen is available
         if let screen = NSScreen.main {
-            // Calculate and set the exact width of the notch
+                // Calculate and set the exact width of the notch
             if let topLeftNotchpadding: CGFloat = screen.auxiliaryTopLeftArea?.width,
                let topRightNotchpadding: CGFloat = screen.auxiliaryTopRightArea?.width {
                 notchWidth = screen.frame.width - topLeftNotchpadding - topRightNotchpadding + 10
             }
             
-            // Use MenuBar height as notch height if there is no notch
+                // Use MenuBar height as notch height if there is no notch
             notchHeight = screen.frame.maxY - screen.visibleFrame.maxY
             
-            // Check if the Mac has a notch
+                // Check if the Mac has a notch
             if screen.safeAreaInsets.top > 0 {
                 notchHeight = screen.safeAreaInsets.top
             }

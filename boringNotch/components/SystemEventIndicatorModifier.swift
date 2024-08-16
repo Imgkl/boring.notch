@@ -1,20 +1,20 @@
-//
-//  SystemEventIndicatorModifier.swift
-//  boringNotch
-//
-//  Created by Richard Kunkli on 12/08/2024.
-//
+    //
+    //  SystemEventIndicatorModifier.swift
+    //  boringNotch
+    //
+    //  Created by Richard Kunkli on 12/08/2024.
+    //
 
 import SwiftUI
 
-struct SystemEventIndicatorModifier: ViewModifier {
+struct SystemEventIndicatorModifier: View {
     @State var eventType: SystemEventType
     @State var value: CGFloat
     let showSlider: Bool = false
+    var sendEventBack: () -> Void = {}
     
-    func body(content: Content) -> some View {
+    var body: some View {
         VStack {
-            content
             HStack(spacing: 20) {
                 switch (eventType) {
                     case .volume:
@@ -27,6 +27,10 @@ struct SystemEventIndicatorModifier: ViewModifier {
                             .frame(width: 20)
                     case .backlight:
                         Image(systemName: "keyboard")
+                            .contentTransition(.interpolate)
+                            .frame(width: 20)
+                    case .mic:
+                        Image(systemName: MicSymbol(value))
                             .contentTransition(.interpolate)
                             .frame(width: 20)
                 }
@@ -45,9 +49,10 @@ struct SystemEventIndicatorModifier: ViewModifier {
             }
             .symbolVariant(.fill)
             .imageScale(.large)
-            .padding(.vertical)
             if showSlider {
-                Slider(value: $value.animation(.smooth), in: 0...1)
+                Slider(value: $value.animation(.smooth), in: 0...1, onEditingChanged: {
+                    _ in sendEventBack()
+                })
             }
         }
     }
@@ -66,26 +71,32 @@ struct SystemEventIndicatorModifier: ViewModifier {
                 return "speaker.wave.2"
         }
     }
+    
+    func MicSymbol(_ value: CGFloat) -> String {
+        return value > 0 ? "mic" : "mic.slash"
+    }
 }
 
 enum SystemEventType {
     case volume
     case brightness
     case backlight
-}
-
-extension View {
-    func systemEventIndicator(for eventType: SystemEventType, value: CGFloat) -> some View {
-        self.modifier(SystemEventIndicatorModifier(eventType: eventType, value: value))
-    }
+    case mic
 }
 
 #Preview {
-    EmptyView()
-        .systemEventIndicator(for: .volume, value: 0.4)
-        .systemEventIndicator(for: .brightness, value: 0.7)
-        .systemEventIndicator(for: .backlight, value: 0.2)
-        .frame(width: 200)
-        .padding()
-        .background(.black)
+    VStack{
+        SystemEventIndicatorModifier(eventType: .volume, value: 0.4, sendEventBack: {
+            print("Volume changed")
+        })
+        SystemEventIndicatorModifier(eventType: .brightness, value: 0.7,sendEventBack: {
+            print("Volume changed")
+        })
+        SystemEventIndicatorModifier(eventType: .backlight, value: 0.2,sendEventBack: {
+            print("Volume changed")
+        })
+    }
+    .frame(width: 200)
+    .padding()
+    .background(.black)
 }

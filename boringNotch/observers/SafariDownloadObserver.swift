@@ -24,7 +24,7 @@ public class SafariDownloadModel: ObservableObject {
         
         
         
-        plistURL = NSURL(fileURLWithPath: "~/Library/Safari/Downloads.plist").filePathURL!
+        plistURL = NSURL(fileURLWithPath: "/Library/Safari/Downloads.plist").filePathURL!
         
         let plist = try decoder.decode(DownloadPlist.self, from: Data(contentsOf: plistURL))
         bytesDownloaded = plist.DownloadEntryProgressBytesSoFar
