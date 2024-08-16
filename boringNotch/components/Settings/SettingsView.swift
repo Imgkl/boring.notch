@@ -8,6 +8,7 @@
 import SwiftUI
 import LaunchAtLogin
 import Sparkle
+import KeyboardShortcuts
 
 struct SettingsView: View {
     @EnvironmentObject var vm: BoringViewModel
@@ -38,6 +39,9 @@ struct SettingsView: View {
             Shelf()
                 .tabItem { Label("Shelf", systemImage: "books.vertical") }
                 .tag(SettingsEnum.shelf)
+            Clip()
+                .tabItem { Label("Clipboard", systemImage: "clipboard") }
+                .tag(SettingsEnum.clip)
             About()
                 .tabItem { Label("About", systemImage: "info.circle") }
                 .tag(SettingsEnum.about)
@@ -318,6 +322,49 @@ struct SettingsView: View {
                 comingSoonTag()
             }
             .disabled(true)
+        }
+    }
+    
+    @ViewBuilder
+    func Clip() -> some View {
+        Form {
+            Section {
+                Toggle("Show clipboard history panel", isOn: $vm.showCHPanel)
+                
+                Toggle(isOn: .constant(true), label: {
+                    Text("Enable clipboard history")
+                })
+                
+                KeyboardShortcuts.Recorder("Clipboard history panel shortcut", name: .clipboardHistoryPanel)
+                
+                Picker("Keep history for", selection: .constant(2)) {
+                    Text("1 day")
+                        .tag(0)
+                    Text("1 week")
+                        .tag(1)
+                    Text("1 month")
+                        .tag(2)
+                    Text("1 year")
+                        .tag(3)
+                    Text("Forever")
+                        .tag(4)
+                }
+                
+                HStack {
+                    Text("Clipboard history cache")
+                    Spacer()
+                    Text("0 MB")
+                        .foregroundStyle(.secondary)
+                }
+                
+            } header: {
+                comingSoonTag()
+            }
+            #if DEBUG
+            .disabled(false)
+            #else
+            .disabled(true)
+            #endif
         }
     }
     

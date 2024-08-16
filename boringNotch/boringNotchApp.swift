@@ -1,14 +1,15 @@
-    //
-    //  boringNotchApp.swift
-    //  boringNotchApp
-    //
-    //  Created by Harsh Vardhan  Goswami  on 02/08/24.
-    //
+//
+//  boringNotchApp.swift
+//  boringNotchApp
+//
+//  Created by Harsh Vardhan  Goswami  on 02/08/24.
+//
 
 import SwiftUI
 import AVFoundation
 import Combine
 import Sparkle
+import KeyboardShortcuts
 
 @main
 struct DynamicNotchApp: App {
@@ -31,6 +32,15 @@ struct DynamicNotchApp: App {
                 Text("Settings")
             })
             .keyboardShortcut(KeyEquivalent(","), modifiers: .command)
+            Button("Clipboard history") {
+                self.appDelegate.vm.showCHPanel.toggle()
+            }
+            .keyboardShortcut(KeyboardShortcuts.Name("clipboardHistoryPanel"))
+            #if DEBUG
+            .disabled(false)
+            #else
+            .disabled(true)
+            #endif
             CheckForUpdatesView(updater: updaterController.updater)
             Divider()
             Button("Quit", role: .destructive) {
@@ -103,7 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let notchCenterX = screenFrame.frame.width / 2
             let windowX = notchCenterX - windowWidth / 2
             let windowY = screenFrame.frame.height
-
+            
             window.setFrameTopLeftPoint(NSPoint(x: windowX, y: windowY))
         }
     }
