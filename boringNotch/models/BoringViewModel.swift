@@ -102,7 +102,7 @@ class BoringViewModel: NSObject, ObservableObject {
             }
         }
         DispatchQueue.main.async {
-            withAnimation{
+            withAnimation(.smooth) {
                 self.sneakPeak.show = status
                 self.sneakPeak.type = type
                 self.sneakPeak.value = value

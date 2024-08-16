@@ -23,7 +23,7 @@ class MicrophoneHandler : ObservableObject {
             vm?.toggleSneakPeak(status: true, type: .mic, value: currentMicStatus ? 1 : 0)
         }
     }
-    @Published var hotkey: UInt16 = 0x60 {
+    @Published var hotkey: UInt16 = 0xF708 {
         didSet {
             UserDefaults.standard.set(hotkey, forKey: "MicrophoneHotkey")
             setupHotkeyMonitor()

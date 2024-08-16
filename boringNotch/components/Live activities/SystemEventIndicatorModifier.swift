@@ -15,7 +15,6 @@ struct SystemEventIndicatorModifier: View {
     var sendEventBack: () -> Void = {}
     
     var body: some View {
-        VStack {
             HStack(spacing: 14) {
                 switch (eventType) {
                     case .volume:
@@ -31,31 +30,33 @@ struct SystemEventIndicatorModifier: View {
                             .contentTransition(.interpolate)
                             .frame(width: 20, height: 15)
                     case .mic:
-                        Image(systemName: MicSymbol(value))
+                        Image(systemName: "mic")
+                            .symbolVariant(value > 0 ? .none : .slash)
                             .contentTransition(.interpolate)
                             .frame(width: 20, height: 15)
                 }
-                
-                GeometryReader { geo in
-                    ZStack(alignment: .leading) {
-                        Capsule()
-                            .fill(.quaternary)
-                        Capsule()
-                            .fill(LinearGradient(colors: vm.systemEventIndicatorUseAccent ? [vm.accentColor, vm.accentColor.ensureMinimumBrightness(factor: 0.2)] : [.white, .white.opacity(0.2)], startPoint: .trailing, endPoint: .leading))
-                            .frame(width: geo.size.width * value)
-                            .shadow(color: vm.systemEventIndicatorShadow ? vm.systemEventIndicatorUseAccent ? vm.accentColor.ensureMinimumBrightness(factor: 0.7) : .white : .clear, radius: 8, x: 3)
+                if (eventType != .mic) {
+                    GeometryReader { geo in
+                            ZStack(alignment: .leading) {
+                                Capsule()
+                                    .fill(.quaternary)
+                                Capsule()
+                                    .fill(LinearGradient(colors: vm.systemEventIndicatorUseAccent ? [vm.accentColor, vm.accentColor.ensureMinimumBrightness(factor: 0.2)] : [.white, .white.opacity(0.2)], startPoint: .trailing, endPoint: .leading))
+                                    .frame(width: geo.size.width * value)
+                                    .shadow(color: vm.systemEventIndicatorShadow ? vm.systemEventIndicatorUseAccent ? vm.accentColor.ensureMinimumBrightness(factor: 0.7) : .white : .clear, radius: 8, x: 3)
+                            }
                     }
+                    .frame(height: 6)
+                } else {
+                    Text("Mic \(value > 0 ? "unmuted" : "muted")")
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .allowsTightening(true)
                 }
-                .frame(height: 6)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .symbolVariant(.fill)
             .imageScale(.large)
-            if showSlider {
-                Slider(value: $value.animation(.smooth), in: 0...1, onEditingChanged: {
-                    _ in sendEventBack()
-                })
-            }
-        }
     }
     
     func SpeakerSymbol(_ value: CGFloat) -> String {
@@ -71,10 +72,6 @@ struct SystemEventIndicatorModifier: View {
             default:
                 return "speaker.wave.2"
         }
-    }
-    
-    func MicSymbol(_ value: CGFloat) -> String {
-        return value > 0 ? "mic" : "mic.slash"
     }
 }
 
