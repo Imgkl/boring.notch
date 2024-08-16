@@ -330,12 +330,6 @@ struct SettingsView: View {
     func Clip() -> some View {
         Form {
             Section {
-                Toggle("Show clipboard history panel", isOn: $vm.showCHPanel)
-                
-                Toggle(isOn: .constant(true), label: {
-                    Text("Enable clipboard history")
-                })
-                
                 KeyboardShortcuts.Recorder("Clipboard history panel shortcut", name: .clipboardHistoryPanel)
                 
                 Picker("Keep history for", selection: .constant(2)) {
@@ -354,12 +348,26 @@ struct SettingsView: View {
                 HStack {
                     Text("Clipboard history cache")
                     Spacer()
-                    Text("0 MB")
+                    Text("-")
                         .foregroundStyle(.secondary)
                 }
                 
-            } header: {
-                comingSoonTag()
+                HStack {
+                    Text("Purge clipboard history")
+                    Spacer()
+                    Button {
+                        
+                    } label: {
+                        HStack {
+                            Text("Delete all")
+                            Image(systemName: "trash")
+                        }
+                        .contentShape(.rect)
+                    }
+                    .foregroundStyle(.red)
+                    .buttonStyle(PlainButtonStyle())
+                }
+                
             }
             #if DEBUG
             .disabled(false)
