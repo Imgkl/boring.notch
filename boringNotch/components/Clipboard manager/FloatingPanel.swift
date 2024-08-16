@@ -27,7 +27,7 @@ class FloatingPanel<Content: View>: NSPanel {
         
         /// Allow the panel to be on top of other windows
         isFloatingPanel = true
-        level = .mainMenu + 1
+        level = .mainMenu + 2
         /// Remove the border and shadow
         hasShadow = false
         
@@ -37,9 +37,6 @@ class FloatingPanel<Content: View>: NSPanel {
         /// Don't show a window title, even if it's set
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
-        
-        /// Hide when unfocused
-        hidesOnDeactivate = true
         
         /// Hide all traffic light buttons
         standardWindowButton(.closeButton)?.isHidden = true

@@ -29,7 +29,6 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
                 panel?.close()
             }
             .onChange(of: isPresented) { oldValue, newValue in
-                print("panel", isPresented)
                 if newValue {
                     present()
                 } else {

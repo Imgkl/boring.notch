@@ -1,9 +1,9 @@
-    //
-    //  ClipboardView.swift
-    //  boringNotch
-    //
-    //  Created by Harsh Vardhan  Goswami  on 16/08/24.
-    //
+//
+//  ClipboardView.swift
+//  boringNotch
+//
+//  Created by Harsh Vardhan  Goswami  on 16/08/24.
+//
 
 import Foundation
 import SwiftUI
@@ -11,33 +11,68 @@ import SwiftUI
 
 struct ClipboardItemUI: View {
     @State private var hovered: Bool = false
+    @State private var clicked: Bool = false
     let content: String
     let onClick: () -> Void
     var body: some View {
         Button(action: onClick) {
-            Text(content)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(width: (NSScreen.main?.frame.size.width ?? 1800) / 6)
-                .frame(maxHeight: .infinity, alignment: .topLeading)
-                .padding(10)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(hovered ? .white.opacity(0.08) : .black.opacity(0.08))
-                        .strokeBorder(Color(nsColor: .textColor).opacity(0.08))
-                )
-                .onContinuousHover { phase in
-                    switch phase {
-                        case .active:
-                            withAnimation(.smooth(duration: 0.4)) {
-                                hovered = true
+            ZStack(alignment: .bottomLeading) {
+                Text(content)
+                    .blur(radius: !clicked ? 0 : 10)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .padding(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(hovered ? .white.opacity(0.08) : .black.opacity(0.08))
+                            .strokeBorder(Color(nsColor: .textColor).opacity(0.08))
+                    )
+                    .onTapGesture {
+                        withAnimation {
+                            clicked = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation {
+                                clicked = false
                             }
-                        case .ended:
-                            withAnimation(.smooth(duration: 0.4)) {
-                                hovered = false
-                            }
+                        }
                     }
+                    .overlay {
+                        if clicked {
+                            VStack(spacing: 15) {
+                                Image(systemName: "doc.on.clipboard.fill")
+                                    .font(.system(size: 24))
+                                    .symbolRenderingMode(.hierarchical)
+                                Text("Copied to clipboard")
+                            }
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .padding()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        }
+                    }
+                    .onContinuousHover { phase in
+                        switch phase {
+                            case .active:
+                                withAnimation(.smooth(duration: 0.4)) {
+                                    hovered = true
+                                }
+                            case .ended:
+                                withAnimation(.smooth(duration: 0.4)) {
+                                    hovered = false
+                                }
+                        }
+                    }
+                    .padding([.leading, .bottom], 7)
+                
+                if hovered {
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(.gray)
+                        .frame(width: 30, height: 30)
+                        .shadow(color: .black.opacity(0.3), radius: 5)
+                        .transition(.scale.combined(with: .blurReplace))
                 }
-            
+            }
+            .frame(width: (NSScreen.main?.frame.size.width ?? 1800) / 6)
         }
         .buttonStyle(PlainButtonStyle())
     }

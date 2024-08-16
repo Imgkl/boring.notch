@@ -33,7 +33,7 @@ struct DynamicNotchApp: App {
             })
             .keyboardShortcut(KeyEquivalent(","), modifiers: .command)
             Button("Clipboard history") {
-                self.appDelegate.vm.showCHPanel.toggle()
+                self.appDelegate.vm.openClipboard()
             }
             .keyboardShortcut(KeyboardShortcuts.Name("clipboardHistoryPanel"))
             #if DEBUG
