@@ -19,6 +19,8 @@ struct ClipboardItemStruct {
             return NSAttributedString(rtf: content, documentAttributes: nil)
         } else if type == .html {
             return try? NSAttributedString(data: content, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
+        } else if type == .string {
+            return NSAttributedString(string: String(data: content, encoding: .utf8) ?? "")
         }
         return nil
     }
@@ -248,5 +250,14 @@ class ClipboardManager {
         }
         
         return ""
+    }
+    
+    func copyItem(_ item: ClipboardItemStruct) {
+        clipboard.clearContents()
+        if item.isText() {
+            clipboard.setString(item.getAttributedString()?.string ?? "", forType: .string)
+        } else if item.isImage() {
+            clipboard.setData(item.content, forType: item.type)
+        }
     }
 }

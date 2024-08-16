@@ -134,7 +134,9 @@ struct ClipboardView: View {
                             ForEach(0..<self.clipboardManager.clipboardItems.count, id: \.self) { index in
                                 ClipboardItemUI(
                                     item: self.clipboardManager.clipboardItems[index],
-                                    onClick: {}
+                                    onClick: {
+                                        self.clipboardManager.copyItem(self.clipboardManager.clipboardItems[index])
+                                    }
                                 )
                                 .padding(.leading, index == 0 ? nil : 0)
                                 .padding(.trailing, (index == self.clipboardManager.clipboardItems.count - 1) ? nil : 0)
