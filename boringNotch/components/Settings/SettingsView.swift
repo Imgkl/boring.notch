@@ -8,6 +8,7 @@
 import SwiftUI
 import LaunchAtLogin
 import Sparkle
+import KeyboardShortcuts
 
 struct SettingsView: View {
     @EnvironmentObject var vm: BoringViewModel
@@ -38,6 +39,9 @@ struct SettingsView: View {
             Shelf()
                 .tabItem { Label("Shelf", systemImage: "books.vertical") }
                 .tag(SettingsEnum.shelf)
+            Clip()
+                .tabItem { Label("Clipboard", systemImage: "clipboard") }
+                .tag(SettingsEnum.clip)
             About()
                 .tabItem { Label("About", systemImage: "info.circle") }
                 .tag(SettingsEnum.about)
@@ -50,6 +54,8 @@ struct SettingsView: View {
     @ViewBuilder
     func GeneralSettings() -> some View {
         Form {
+            nonSavingSettingsBadge()
+            
             Section {
                 HStack() {
                     ForEach(accentColors, id: \.self) { color in
@@ -188,6 +194,7 @@ struct SettingsView: View {
         Form {
             Section {
                 Toggle("Enable colored spectrograms", isOn: $vm.coloredSpectrogram.animation())
+                Toggle("Enable sneak peek", isOn: $vm.enableSneakPeek)
                 HStack {
                     Stepper(value: $vm.waitInterval, in: 0...10, step: 1) {
                         HStack {
@@ -318,6 +325,49 @@ struct SettingsView: View {
         }
     }
     
+    @ViewBuilder
+    func Clip() -> some View {
+        Form {
+            Section {
+                Toggle("Show clipboard history panel", isOn: $vm.showCHPanel)
+                
+                Toggle(isOn: .constant(true), label: {
+                    Text("Enable clipboard history")
+                })
+                
+                KeyboardShortcuts.Recorder("Clipboard history panel shortcut", name: .clipboardHistoryPanel)
+                
+                Picker("Keep history for", selection: .constant(2)) {
+                    Text("1 day")
+                        .tag(0)
+                    Text("1 week")
+                        .tag(1)
+                    Text("1 month")
+                        .tag(2)
+                    Text("1 year")
+                        .tag(3)
+                    Text("Forever")
+                        .tag(4)
+                }
+                
+                HStack {
+                    Text("Clipboard history cache")
+                    Spacer()
+                    Text("0 MB")
+                        .foregroundStyle(.secondary)
+                }
+                
+            } header: {
+                comingSoonTag()
+            }
+            #if DEBUG
+            .disabled(false)
+            #else
+            .disabled(true)
+            #endif
+        }
+    }
+    
     func comingSoonTag () -> some View {
         Text("Coming soon")
             .foregroundStyle(.secondary)
@@ -326,5 +376,22 @@ struct SettingsView: View {
             .padding(.horizontal, 6)
             .background(Color(nsColor: .secondarySystemFill))
             .clipShape(.capsule)
+    }
+    
+    func nonSavingSettingsBadge() -> some View {
+        Section {
+            HStack(spacing: 12) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 22))
+                    .foregroundStyle(.yellow)
+                VStack(alignment: .leading) {
+                    Text("Your settings will not be restored on restart")
+                        .font(.headline)
+                    Text("By doing this, we can quickly address global bugs. It will be enabled later on.")
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+            }
+        }
     }
 }

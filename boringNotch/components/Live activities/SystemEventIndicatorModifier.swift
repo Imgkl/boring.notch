@@ -60,7 +60,7 @@ struct SystemEventIndicatorModifier: View {
     func SpeakerSymbol(_ value: CGFloat) -> String {
         switch(value) {
             case 0:
-                return "speaker.slash.fill"
+                return "speaker.slash"
             case 0...0.3:
                 return "speaker.wave.1"
             case 0.3...0.8:

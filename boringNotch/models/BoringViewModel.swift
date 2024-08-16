@@ -53,6 +53,8 @@ class BoringViewModel: NSObject, ObservableObject {
     @Published var notchMetastability: Bool = true // True if notch not open
     @Published var settingsIconInNotch: Bool = true
     private var sneakPeakDispatch: DispatchWorkItem?
+    @Published var enableSneakPeek: Bool = false
+    @Published var showCHPanel: Bool = false
     @Published var sneakPeak: SneakPeak = SneakPeak() {
         didSet {
             if sneakPeak.show {

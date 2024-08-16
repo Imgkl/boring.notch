@@ -38,7 +38,22 @@
     "0" : {
 
     },
+    "0 MB" : {
+
+    },
     "1" : {
+
+    },
+    "1 day" : {
+
+    },
+    "1 month" : {
+
+    },
+    "1 week" : {
+
+    },
+    "1 year" : {
 
     },
     "About" : {
@@ -124,6 +139,9 @@
         }
       }
     },
+    "By doing this, we can quickly address global bugs. It will be enabled later on." : {
+
+    },
     "Charging" : {
       "localizations" : {
         "en" : {
@@ -148,7 +166,22 @@
     "Check for Updates…" : {
 
     },
+    "Clear all" : {
+
+    },
+    "Clipboard" : {
+
+    },
     "Clipboard history" : {
+
+    },
+    "Clipboard history cache" : {
+
+    },
+    "Clipboard history is empty" : {
+
+    },
+    "Clipboard history panel shortcut" : {
 
     },
     "Close" : {
@@ -216,6 +249,9 @@
     "Edit layout" : {
 
     },
+    "Enable clipboard history" : {
+
+    },
     "Enable colored spectrograms" : {
       "localizations" : {
         "en" : {
@@ -245,6 +281,9 @@
     "Enable shelf" : {
 
     },
+    "Enable sneak peek" : {
+
+    },
     "Exclude apps" : {
       "localizations" : {
         "en" : {
@@ -254,6 +293,9 @@
           }
         }
       }
+    },
+    "Forever" : {
+
     },
     "General" : {
       "localizations" : {
@@ -291,6 +333,12 @@
           }
         }
       }
+    },
+    "Keep history for" : {
+
+    },
+    "Keep using the app and your copied content will be shown here" : {
+
     },
     "Made with 🫶🏻 by not so boring not.people" : {
       "localizations" : {
@@ -475,6 +523,9 @@
         }
       }
     },
+    "Show clipboard history panel" : {
+
+    },
     "Show cool face animation while inactivity" : {
       "localizations" : {
         "en" : {
@@ -542,6 +593,9 @@
       }
     },
     "What's New" : {
+
+    },
+    "Your settings will not be restored on restart" : {
 
     }
   },
