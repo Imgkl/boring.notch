@@ -338,17 +338,15 @@ struct SettingsView: View {
                 
                 KeyboardShortcuts.Recorder("Clipboard history panel shortcut", name: .clipboardHistoryPanel)
                 
-                Picker("Keep history for", selection: .constant(2)) {
+                Picker("Keep history for", selection: $vm.clipBoardHistoryDuration) {
                     Text("1 day")
-                        .tag(0)
-                    Text("1 week")
                         .tag(1)
+                    Text("1 week")
+                        .tag(7)
                     Text("1 month")
-                        .tag(2)
+                        .tag(30)
                     Text("1 year")
-                        .tag(3)
-                    Text("Forever")
-                        .tag(4)
+                        .tag(365)
                 }
                 
                 HStack {

@@ -26,6 +26,7 @@
 		14288E022C6EA62600B9F80C /* ClipboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E012C6EA62600B9F80C /* ClipboardView.swift */; };
 		14288E062C6EB6F400B9F80C /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E052C6EB6F400B9F80C /* ClipboardManager.swift */; };
 		14288E0A2C6F34AC00B9F80C /* KeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E092C6F34AC00B9F80C /* KeyCode.swift */; };
+		14288E0C2C6F8EC000B9F80C /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E0B2C6F8EC000B9F80C /* AppIcons.swift */; };
 		1443E7F32C609DCE0027C1FC /* matters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1443E7F22C609DCE0027C1FC /* matters.swift */; };
 		147163982C5D35B70068B555 /* MusicVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163972C5D35B70068B555 /* MusicVisualizer.swift */; };
 		1471639A2C5D35FF0068B555 /* MusicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163992C5D35FF0068B555 /* MusicManager.swift */; };
@@ -97,6 +98,7 @@
 		14288E012C6EA62600B9F80C /* ClipboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardView.swift; sourceTree = "<group>"; };
 		14288E052C6EB6F400B9F80C /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
 		14288E092C6F34AC00B9F80C /* KeyCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyCode.swift; sourceTree = "<group>"; };
+		14288E0B2C6F8EC000B9F80C /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
 		1443E7F22C609DCE0027C1FC /* matters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = matters.swift; sourceTree = "<group>"; };
 		1443E7F42C609E650027C1FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		147163972C5D35B70068B555 /* MusicVisualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicVisualizer.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				14288DD72C6E015000B9F80C /* boringNotch-Bridging-Header.h */,
 				14288DF42C6E7BF500B9F80C /* OSDUIManager.swift */,
 				14288E092C6F34AC00B9F80C /* KeyCode.swift */,
+				14288E0B2C6F8EC000B9F80C /* AppIcons.swift */,
 			);
 			path = helpers;
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				B15063542C63E18700EBB0E3 /* SettingsView.swift in Sources */,
 				14288DDC2C6E015000B9F80C /* AudioPlayer.swift in Sources */,
 				14288DF72C6E956200B9F80C /* DisplayManager.swift in Sources */,
+				14288E0C2C6F8EC000B9F80C /* AppIcons.swift in Sources */,
 				14288DE62C6E016F00B9F80C /* VolumeChangeListener.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -703,7 +707,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "1.9+1";
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = 342QMGS27Q;
+				DEVELOPMENT_TEAM = JPWMG84CH8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -745,7 +749,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "1.9+1";
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = 342QMGS27Q;
+				DEVELOPMENT_TEAM = JPWMG84CH8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

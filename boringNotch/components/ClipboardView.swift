@@ -1,23 +1,39 @@
-//
-//  ClipboardView.swift
-//  boringNotch
-//
-//  Created by Harsh Vardhan  Goswami  on 16/08/24.
-//
+    //
+    //  ClipboardView.swift
+    //  boringNotch
+    //
+    //  Created by Harsh Vardhan  Goswami  on 16/08/24.
+    //
 
 import Foundation
 import SwiftUI
 
 
+private var appIcons: AppIcons = AppIcons()
+
+struct CopiedItemView: View {
+    let item: ClipboardItemStruct
+    var body: some View {
+        if item.isImage() {
+            Image(nsImage: item.getImage()!)
+                .resizable()
+                .scaledToFit()
+        } else {
+            Text(item.getAttributedString()?.string ?? "")
+        }
+    }
+}
+
 struct ClipboardItemUI: View {
     @State private var hovered: Bool = false
     @State private var clicked: Bool = false
-    let content: String
+    let item: ClipboardItemStruct
     let onClick: () -> Void
+    
     var body: some View {
         Button(action: onClick) {
             ZStack(alignment: .bottomLeading) {
-                Text(content)
+                CopiedItemView(item: item)
                     .blur(radius: !clicked ? 0 : 10)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                     .padding(10)
@@ -63,10 +79,11 @@ struct ClipboardItemUI: View {
                         }
                     }
                     .padding([.leading, .bottom], 7)
-                
                 if hovered {
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(.gray)
+                    Image(nsImage: appIcons.getIcon(bundleID: item.sourceAppBundle!) ?? NSImage())
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
                         .frame(width: 30, height: 30)
                         .shadow(color: .black.opacity(0.3), radius: 5)
                         .transition(.scale.combined(with: .blurReplace))
@@ -77,6 +94,7 @@ struct ClipboardItemUI: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
+
 
 struct ClipboardView: View {
     var clipboardManager: ClipboardManager
@@ -109,9 +127,10 @@ struct ClipboardView: View {
                     ScrollView(.horizontal) {
                         HStack(spacing: 20) {
                             ForEach(0..<self.clipboardManager.clipboardItems.count, id: \.self) { index in
-                                ClipboardItemUI(content: self.clipboardManager.clipboardItems[index], onClick: {
-                                    clipboardManager.copyItem(self.clipboardManager.clipboardItems[index])
-                                })
+                                ClipboardItemUI(
+                                    item: self.clipboardManager.clipboardItems[index],
+                                    onClick: {}
+                                )
                                 .padding(.leading, index == 0 ? nil : 0)
                                 .padding(.trailing, (index == self.clipboardManager.clipboardItems.count - 1) ? nil : 0)
                             }
@@ -130,6 +149,6 @@ struct ClipboardView: View {
 
 struct ClipboardView_Previews: PreviewProvider {
     static var previews: some View {
-        ClipboardView(clipboardManager:ClipboardManager(vm:.init())).frame(width: 140, height: 60).padding()
+        ClipboardView(clipboardManager:ClipboardManager(vm:.init())).frame(width: .infinity, height: .infinity).padding()
     }
 }

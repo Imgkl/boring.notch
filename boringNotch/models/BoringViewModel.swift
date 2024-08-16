@@ -74,6 +74,7 @@ class BoringViewModel: NSObject, ObservableObject {
         }
     }
     @Published var maxClipboardRecords: Int = 1000;
+    @Published var clipBoardHistoryDuration: Int = 30
     
     deinit {
         destroy()

@@ -44,7 +44,9 @@ struct ContentView: View {
                 clipboardManager?.captureClipboardText()
             })
             .floatingPanel(isPresented: $vm.showCHPanel) {
-                ClipboardView(clipboardManager: clipboardManager!)
+                ClipboardView(clipboardManager: clipboardManager!).onAppear(){
+                    clipboardManager?.loadClipboardItems()
+                }
             }
     }
 }
