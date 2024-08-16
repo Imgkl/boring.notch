@@ -45,6 +45,7 @@ struct ContentView: View {
             })
             .floatingPanel(isPresented: $vm.showCHPanel) {
                 ClipboardView(clipboardManager: clipboardManager!)
+                    .environmentObject(vm)
             }
     }
 }

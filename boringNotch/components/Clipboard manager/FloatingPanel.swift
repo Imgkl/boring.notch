@@ -11,14 +11,16 @@ import SwiftUI
 
 class FloatingPanel<Content: View>: NSPanel {
     @Binding var isPresented: Bool
+    private var content: () -> Content
     
-    init(view: () -> Content,
+    init(view: @escaping () -> Content,
          contentRect: NSRect,
          backing: NSWindow.BackingStoreType = .buffered,
          defer flag: Bool = false,
          isPresented: Binding<Bool>) {
         
         self._isPresented = isPresented
+        self.content = view
         
         super.init(contentRect: contentRect,
                    styleMask: [.nonactivatingPanel, .fullSizeContentView, .borderless, .utilityWindow],
@@ -57,6 +59,21 @@ class FloatingPanel<Content: View>: NSPanel {
         contentView?.needsDisplay = true
         contentView?.wantsLayer = true
         
+        updateContentView()
+    }
+    
+    private func updateContentView() {
+        contentView = NSHostingView(rootView: content()
+            .ignoresSafeArea()
+            .environment(\.floatingPanel, self))
+        
+        contentView?.needsDisplay = true
+        contentView?.wantsLayer = true
+    }
+    
+    // Call this method whenever you need to update the view
+    func updateView() {
+        updateContentView()
     }
     
     /// Close automatically when out of focus

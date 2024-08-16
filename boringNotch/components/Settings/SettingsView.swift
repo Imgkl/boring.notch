@@ -332,6 +332,8 @@ struct SettingsView: View {
             Section {
                 KeyboardShortcuts.Recorder("Clipboard history panel shortcut", name: .clipboardHistoryPanel)
                 
+                Toggle("Hide scrollbar", isOn: $vm.clipboardHistoryHideScrollbar)
+                
                 Picker("Keep history for", selection: .constant(2)) {
                     Text("1 day")
                         .tag(0)

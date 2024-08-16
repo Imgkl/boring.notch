@@ -80,6 +80,7 @@ struct ClipboardItemUI: View {
 
 struct ClipboardView: View {
     var clipboardManager: ClipboardManager
+    @EnvironmentObject var vm: BoringViewModel
     @State private var showAlert: Bool = false
     
     var body: some View {
@@ -110,7 +111,7 @@ struct ClipboardView: View {
                                            systemImage: "clipboard",
                                            description: Text("Keep using the app and your copied content will be shown here"))
                 } else {
-                    ScrollView(.horizontal) {
+                    ScrollView(.horizontal, showsIndicators: !vm.clipboardHistoryHideScrollbar) {
                         HStack(spacing: 20) {
                             ForEach(0..<self.clipboardManager.clipboardItems.count, id: \.self) { index in
                                 ClipboardItemUI(content: self.clipboardManager.clipboardItems[index], onClick: {
