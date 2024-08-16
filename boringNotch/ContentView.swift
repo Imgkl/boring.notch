@@ -47,6 +47,7 @@ struct ContentView: View {
                 ClipboardView(clipboardManager: clipboardManager!).onAppear(){
                     clipboardManager?.loadClipboardItems()
                 }
+                    .environmentObject(vm)
             }
     }
 }

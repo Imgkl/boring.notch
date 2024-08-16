@@ -98,6 +98,9 @@ struct ClipboardItemUI: View {
 
 struct ClipboardView: View {
     var clipboardManager: ClipboardManager
+    @EnvironmentObject var vm: BoringViewModel
+    @State private var showAlert: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {
@@ -105,7 +108,9 @@ struct ClipboardView: View {
                 Spacer()
                 
                 Group {
-                    Button {self.clipboardManager.clearHistory()} label: {
+                    Button {
+                        showAlert = true
+                    } label: {
                         Label("Clear all", systemImage: "trash")
                             .padding(.horizontal, 8)
                     }
@@ -124,7 +129,7 @@ struct ClipboardView: View {
                                            systemImage: "clipboard",
                                            description: Text("Keep using the app and your copied content will be shown here"))
                 } else {
-                    ScrollView(.horizontal) {
+                    ScrollView(.horizontal, showsIndicators: !vm.clipboardHistoryHideScrollbar) {
                         HStack(spacing: 20) {
                             ForEach(0..<self.clipboardManager.clipboardItems.count, id: \.self) { index in
                                 ClipboardItemUI(
@@ -144,6 +149,14 @@ struct ClipboardView: View {
             Divider()
         }
         .background(VisualEffectView(material: .hudWindow, blendingMode: .behindWindow))
+        .alert("Are you sure you want to clear your clipboard history?", isPresented: self.$showAlert) {
+            Button("Delete", role: .destructive) {
+                self.clipboardManager.clearHistory()
+            }
+        } message: {
+            Text("This action cannot be undone")
+                .foregroundStyle(.secondary)
+        }
     }
 }
 

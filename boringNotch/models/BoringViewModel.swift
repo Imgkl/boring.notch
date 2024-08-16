@@ -57,6 +57,7 @@ class BoringViewModel: NSObject, ObservableObject {
     @Published var showCHPanel: Bool = false
     @Published var systemEventIndicatorShadow: Bool = true
     @Published var systemEventIndicatorUseAccent: Bool = false
+    @Published var clipboardHistoryHideScrollbar: Bool = true
     @Published var sneakPeak: SneakPeak = SneakPeak() {
         didSet {
             if sneakPeak.show {
@@ -103,7 +104,7 @@ class BoringViewModel: NSObject, ObservableObject {
             }
         }
         DispatchQueue.main.async {
-            withAnimation{
+            withAnimation(.smooth) {
                 self.sneakPeak.show = status
                 self.sneakPeak.type = type
                 self.sneakPeak.value = value

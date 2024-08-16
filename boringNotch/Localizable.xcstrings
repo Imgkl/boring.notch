@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "-" : {
+
+    },
     "(%@)" : {
       "localizations" : {
         "en" : {
@@ -38,9 +41,6 @@
     "0" : {
 
     },
-    "0 MB" : {
-
-    },
     "1" : {
 
     },
@@ -75,6 +75,9 @@
           }
         }
       }
+    },
+    "Are you sure you want to clear your clipboard history?" : {
+
     },
     "Automatically check for updates" : {
       "localizations" : {
@@ -213,6 +216,12 @@
     "Customization" : {
 
     },
+    "Delete" : {
+
+    },
+    "Delete all" : {
+
+    },
     "Download icon style" : {
       "localizations" : {
         "en" : {
@@ -250,9 +259,6 @@
 
     },
     "Edit layout" : {
-
-    },
-    "Enable clipboard history" : {
 
     },
     "Enable colored spectrograms" : {
@@ -318,6 +324,9 @@
       }
     },
     "Got it!" : {
+
+    },
+    "Hide scrollbar" : {
 
     },
     "HUDs" : {
@@ -390,6 +399,9 @@
         }
       }
     },
+    "Mic %@" : {
+
+    },
     "Minimum hover duration" : {
 
     },
@@ -445,6 +457,9 @@
           }
         }
       }
+    },
+    "Purge clipboard history" : {
+
     },
     "Quit" : {
       "localizations" : {
@@ -523,9 +538,6 @@
         }
       }
     },
-    "Show clipboard history panel" : {
-
-    },
     "Show cool face animation while inactivity" : {
       "localizations" : {
         "en" : {
@@ -565,6 +577,9 @@
           }
         }
       }
+    },
+    "This action cannot be undone" : {
+
     },
     "Use accent color" : {
 
