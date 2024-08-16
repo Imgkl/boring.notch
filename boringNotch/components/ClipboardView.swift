@@ -10,19 +10,36 @@ import SwiftUI
 
 
 struct ClipboardItemUI: View {
+    @State private var hovered: Bool = false
     let content: String
     let onClick: () -> Void
     var body: some View {
-        Button(action: onClick){
+        Button(action: onClick) {
             Text(content)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(width: (NSScreen.main?.frame.size.width ?? 1800) / 6)
-                .frame(maxHeight: .infinity)
+                .frame(maxHeight: .infinity, alignment: .topLeading)
+                .padding(10)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(.black.opacity(0.08))
+                        .fill(hovered ? .white.opacity(0.08) : .black.opacity(0.08))
                         .strokeBorder(Color(nsColor: .textColor).opacity(0.08))
                 )
-        }.buttonStyle(PlainButtonStyle())
+                .onContinuousHover { phase in
+                    switch phase {
+                        case .active:
+                            withAnimation(.smooth(duration: 0.4)) {
+                                hovered = true
+                            }
+                        case .ended:
+                            withAnimation(.smooth(duration: 0.4)) {
+                                hovered = false
+                            }
+                    }
+                }
+            
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -63,12 +80,12 @@ struct ClipboardView: View {
                                 .padding(.leading, index == 0 ? nil : 0)
                             }
                         }
+                        .padding(.bottom)
                     }
                     .frame(maxHeight: .infinity)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.bottom)
             Divider()
         }
         .background(VisualEffectView(material: .hudWindow, blendingMode: .behindWindow))
