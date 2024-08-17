@@ -92,6 +92,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             contentRect: NSRect(x: 0, y: 0, width: sizing.size.opened.width! + 20, height: sizing.size.opened.height! + 30), styleMask: [.borderless], backing: .buffered, defer: false
         )
         
+        KeyboardShortcuts.onKeyDown(for: .clipboardHistoryPanel) {
+            self.vm.toggleClipboard()
+        }
+        
         window.contentView = NSHostingView(rootView: ContentView(onHover: adjustWindowPosition, batteryModel: .init(vm: self.vm), clipboardManager: clipboardManager, microphoneHandler: self.microphoneHandler).environmentObject(vm))
         
         adjustWindowPosition()

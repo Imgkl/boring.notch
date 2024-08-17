@@ -28,8 +28,6 @@
 		14288E0A2C6F34AC00B9F80C /* KeyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E092C6F34AC00B9F80C /* KeyCode.swift */; };
 		14288E0C2C6F8EC000B9F80C /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E0B2C6F8EC000B9F80C /* AppIcons.swift */; };
 		14288E142C6FC9CF00B9F80C /* DisplayServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14288E132C6FC9CF00B9F80C /* DisplayServices.framework */; };
-		14288E182C6FCA3300B9F80C /* CoreDisplay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14288E172C6FCA3300B9F80C /* CoreDisplay.framework */; };
-		14288E192C6FCA3300B9F80C /* CoreDisplay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 14288E172C6FCA3300B9F80C /* CoreDisplay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		14288E1D2C6FCC2500B9F80C /* NSScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14288E1C2C6FCC2500B9F80C /* NSScreen+Extension.swift */; };
 		1443E7F32C609DCE0027C1FC /* matters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1443E7F22C609DCE0027C1FC /* matters.swift */; };
 		147163982C5D35B70068B555 /* MusicVisualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147163972C5D35B70068B555 /* MusicVisualizer.swift */; };
@@ -77,16 +75,18 @@
 		B1D365CE2C6A979C0047BDBC /* LiveActivityModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D365CD2C6A979C0047BDBC /* LiveActivityModifier.swift */; };
 		B1D365D02C6A9A6C0047BDBC /* SystemEventIndicatorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D365CF2C6A9A6C0047BDBC /* SystemEventIndicatorModifier.swift */; };
 		B1D6FD432C6603730015F173 /* SoftwareUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D6FD422C6603730015F173 /* SoftwareUpdater.swift */; };
+		B1ECFA042C6FE58A002ACD87 /* CoreDisplay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B1ECFA032C6FE58A002ACD87 /* CoreDisplay.framework */; };
+		B1ECFA052C6FE58A002ACD87 /* CoreDisplay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B1ECFA032C6FE58A002ACD87 /* CoreDisplay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		14288E1A2C6FCA3300B9F80C /* Embed Frameworks */ = {
+		B1ECFA062C6FE58A002ACD87 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				14288E192C6FCA3300B9F80C /* CoreDisplay.framework in Embed Frameworks */,
+				B1ECFA052C6FE58A002ACD87 /* CoreDisplay.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +170,7 @@
 		B1D365CD2C6A979C0047BDBC /* LiveActivityModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityModifier.swift; sourceTree = "<group>"; };
 		B1D365CF2C6A9A6C0047BDBC /* SystemEventIndicatorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemEventIndicatorModifier.swift; sourceTree = "<group>"; };
 		B1D6FD422C6603730015F173 /* SoftwareUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdater.swift; sourceTree = "<group>"; };
+		B1ECFA032C6FE58A002ACD87 /* CoreDisplay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreDisplay.framework; path = ../../../../../System/Library/Frameworks/CoreDisplay.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,7 +178,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14288E182C6FCA3300B9F80C /* CoreDisplay.framework in Frameworks */,
+				B1ECFA042C6FE58A002ACD87 /* CoreDisplay.framework in Frameworks */,
 				14288DEE2C6E020900B9F80C /* ApplicationServices.framework in Frameworks */,
 				14D0321D2C68F3350096E6A1 /* Sparkle in Frameworks */,
 				14D0321A2C68F32E0096E6A1 /* LaunchAtLogin in Frameworks */,
@@ -338,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				14288E172C6FCA3300B9F80C /* CoreDisplay.framework */,
+				B1ECFA032C6FE58A002ACD87 /* CoreDisplay.framework */,
 				14288E132C6FC9CF00B9F80C /* DisplayServices.framework */,
 				14D032162C68F2D90096E6A1 /* CoreBrightness.framework */,
 				14D032142C68F2C10096E6A1 /* CoreBrightness */,
@@ -465,7 +467,7 @@
 				14CEF40E2C5CAED300855D72 /* Sources */,
 				14CEF40F2C5CAED300855D72 /* Frameworks */,
 				14CEF4102C5CAED300855D72 /* Resources */,
-				14288E1A2C6FCA3300B9F80C /* Embed Frameworks */,
+				B1ECFA062C6FE58A002ACD87 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -638,6 +640,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -701,6 +704,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -734,6 +738,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "1.9+1";
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
 				DEVELOPMENT_TEAM = 342QMGS27Q;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -777,6 +782,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "1.9+1";
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
 				DEVELOPMENT_TEAM = 342QMGS27Q;
 				ENABLE_HARDENED_RUNTIME = YES;

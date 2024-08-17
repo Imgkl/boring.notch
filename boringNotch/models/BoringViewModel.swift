@@ -128,6 +128,10 @@ class BoringViewModel: NSObject, ObservableObject {
         self.showCHPanel = true;
     }
     
+    func toggleClipboard() {
+        self.showCHPanel.toggle()
+    }
+    
     func showEmpty() {
         self.currentView = .empty
     }
