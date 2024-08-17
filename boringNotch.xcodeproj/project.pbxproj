@@ -257,7 +257,6 @@
 				B17266E22C65F7FB0031BA0D /* WhatsNewView.swift */,
 				B10F84A22C6C9596009F3026 /* TestView.swift */,
 				14288DFD2C6E9A4700B9F80C /* BoringSystemTiles.swift */,
-				14288E012C6EA62600B9F80C /* ClipboardView.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -445,6 +444,7 @@
 			isa = PBXGroup;
 			children = (
 				B18654332C6F45F7000B926A /* FloatingPanel.swift */,
+				14288E012C6EA62600B9F80C /* ClipboardView.swift */,
 			);
 			path = "Clipboard manager";
 			sourceTree = "<group>";

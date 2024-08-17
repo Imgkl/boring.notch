@@ -334,6 +334,8 @@ struct SettingsView: View {
                 
                 Toggle("Hide scrollbar", isOn: $vm.clipboardHistoryHideScrollbar)
                 
+                Toggle("Preserve scroll position", isOn: $vm.clipboardHistoryPreserveScrollPosition)
+                
                 Picker("Keep history for", selection: .constant(2)) {
                     Text("1 day")
                         .tag(1)
