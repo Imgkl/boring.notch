@@ -146,7 +146,7 @@ struct ClipboardView: View {
                             .padding(.bottom)
                         }
                         .onChange(of: self.vm.showCHPanel) { _, _ in
-                            if vm.clipboardHistoryPreserveScrollPosition {
+                            if !vm.clipboardHistoryPreserveScrollPosition {
                                 reader.scrollTo(0)
                             }
                         }

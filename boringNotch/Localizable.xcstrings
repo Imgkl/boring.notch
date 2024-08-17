@@ -448,6 +448,9 @@
         }
       }
     },
+    "Preserve scroll position" : {
+
+    },
     "Progress bar" : {
       "localizations" : {
         "en" : {
