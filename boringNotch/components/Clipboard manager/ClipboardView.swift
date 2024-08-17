@@ -141,20 +141,27 @@ struct ClipboardView: View {
                                            systemImage: "clipboard",
                                            description: Text("Keep using the app and your copied content will be shown here"))
                 } else {
-                    ScrollView(.horizontal, showsIndicators: !vm.clipboardHistoryHideScrollbar) {
-                        HStack(spacing: 20) {
-                            ForEach(0..<self.clipboardManager.searchResults.count, id: \.self) { index in
-                                ClipboardItemUI(
-                                    item: self.clipboardManager.searchResults[index],
-                                    onClick: {
-                                        self.clipboardManager.copyItem(self.clipboardManager.searchResults[index])
-                                    }
-                                )
-                                .padding(.leading, index == 0 ? nil : 0)
-                                .padding(.trailing, (index == self.clipboardManager.searchResults.count - 1) ? nil : 0)
+                    ScrollViewReader { reader in
+                        ScrollView(.horizontal, showsIndicators: !vm.clipboardHistoryHideScrollbar) {
+                            HStack(spacing: 20) {
+                                ForEach(0..<self.clipboardManager.searchResults.count, id: \.self) { index in
+                                    ClipboardItemUI(
+                                        item: self.clipboardManager.searchResults[index],
+                                        onClick: {
+                                            self.clipboardManager.copyItem(self.clipboardManager.searchResults[index])
+                                        }
+                                    )
+                                    .padding(.leading, index == 0 ? nil : 0)
+                                    .padding(.trailing, (index == self.self.clipboardManager.searchResults.count - 1) ? nil : 0)
+                                }
+                            }
+                            .padding(.bottom)
+                        }
+                        .onChange(of: self.vm.showCHPanel) { _, _ in
+                            if vm.clipboardHistoryPreserveScrollPosition {
+                                reader.scrollTo(0)
                             }
                         }
-                        .padding(.bottom)
                     }
                     .frame(maxHeight: .infinity)
                 }
