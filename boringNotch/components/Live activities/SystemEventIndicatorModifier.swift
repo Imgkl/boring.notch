@@ -36,17 +36,7 @@ struct SystemEventIndicatorModifier: View {
                             .frame(width: 20, height: 15)
                 }
                 if (eventType != .mic) {
-                    GeometryReader { geo in
-                            ZStack(alignment: .leading) {
-                                Capsule()
-                                    .fill(.quaternary)
-                                Capsule()
-                                    .fill(LinearGradient(colors: vm.systemEventIndicatorUseAccent ? [vm.accentColor, vm.accentColor.ensureMinimumBrightness(factor: 0.2)] : [.white, .white.opacity(0.2)], startPoint: .trailing, endPoint: .leading))
-                                    .frame(width: geo.size.width * value)
-                                    .shadow(color: vm.systemEventIndicatorShadow ? vm.systemEventIndicatorUseAccent ? vm.accentColor.ensureMinimumBrightness(factor: 0.7) : .white : .clear, radius: 8, x: 3)
-                            }
-                    }
-                    .frame(height: 6)
+                    DraggableProgressBar(value: $value)
                 } else {
                     Text("Mic \(value > 0 ? "unmuted" : "muted")")
                         .foregroundStyle(.secondary)
@@ -83,7 +73,7 @@ enum SystemEventType {
 }
 
 #Preview {
-    VStack{
+    VStack(spacing: 20) {
         SystemEventIndicatorModifier(eventType: .volume, value: .constant(0.4), sendEventBack: {
             print("Volume changed")
         })
@@ -93,8 +83,57 @@ enum SystemEventType {
         SystemEventIndicatorModifier(eventType: .backlight, value: .constant(0.2), sendEventBack: {
             print("Volume changed")
         })
+        SystemEventIndicatorModifier(eventType: .mic, value: .constant(0.2), sendEventBack: {
+            print("Volume changed")
+        })
     }
     .frame(width: 200)
     .padding()
     .background(.black)
+    .environmentObject(BoringViewModel())
+}
+
+struct DraggableProgressBar: View {
+    @EnvironmentObject var vm: BoringViewModel
+    @Binding var value: CGFloat
+    
+    @State private var isDragging = false
+    @State private var dragOffset: CGFloat = 0
+    
+    var body: some View {
+        VStack {
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(.quaternary)
+                    Capsule()
+                        .fill(LinearGradient(colors: vm.systemEventIndicatorUseAccent ? [vm.accentColor, vm.accentColor.ensureMinimumBrightness(factor: 0.2)] : [.white, .white.opacity(0.2)], startPoint: .trailing, endPoint: .leading))
+                        .frame(width: max(0, min(geo.size.width * value, geo.size.width)))
+                        .shadow(color: vm.systemEventIndicatorShadow ? vm.systemEventIndicatorUseAccent ? vm.accentColor.ensureMinimumBrightness(factor: 0.7) : .white : .clear, radius: 8, x: 3)
+                }
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { gesture in
+                            withAnimation(.smooth(duration: 0.3)) {
+                                isDragging = true
+                                updateValue(gesture: gesture, in: geo)
+                            }
+                        }
+                        .onEnded { _ in
+                            withAnimation(.smooth(duration: 0.3)) {
+                                isDragging = false
+                            }
+                        }
+                )
+            }
+            .frame(height: isDragging ? 9 : 6)
+        }
+    }
+    
+    private func updateValue(gesture: DragGesture.Value, in geometry: GeometryProxy) {
+        let dragPosition = gesture.location.x
+        let newValue = dragPosition / geometry.size.width
+        
+        value = max(0, min(newValue, 1))
+    }
 }

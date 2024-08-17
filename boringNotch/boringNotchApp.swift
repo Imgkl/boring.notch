@@ -44,7 +44,7 @@ struct DynamicNotchApp: App {
             CheckForUpdatesView(updater: updaterController.updater)
             Divider()
             Button("Quit", role: .destructive) {
-                exit(0)
+                NSApp.terminate(nil)
             }
             .keyboardShortcut(KeyEquivalent("Q"), modifiers: .command)
         }
@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
     
-    func appWillTerminate() {
+    func applicationWillTerminate(_ notification: Notification) {
         NotificationCenter.default.removeObserver(self)
         OSDUIManager.start()
     }
