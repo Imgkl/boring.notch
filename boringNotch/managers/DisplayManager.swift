@@ -47,6 +47,7 @@ class DisplayManager {
         }
         return brightness
     }
+    
     private static func getM1DisplayBrightness() throws -> Float {
         let task = Process()
         task.launchPath = "/usr/libexec/corebrightnessdiag"
@@ -90,6 +91,7 @@ class DisplayManager {
         pollForBrightnessChanges(vm: vm)
     }
     
+    
     private static func pollForBrightnessChanges(vm: BoringViewModel) {
         var previousBrightness:Float = -1;
         if let currentBrightness:Float = try? getDisplayBrightness(){
@@ -99,7 +101,6 @@ class DisplayManager {
         }
         
         DispatchQueue.global(qos: .background).async {
-            
             while true {
                 do {
                     let currentBrightness = try getDisplayBrightness()
@@ -108,13 +109,11 @@ class DisplayManager {
                         DispatchQueue.main.async {
                             vm.toggleSneakPeak(status: true, type: .brightness, value: CGFloat(currentBrightness))
                         }
-                        print("Brightness changed to \(currentBrightness)")
-                            // Notify the ViewModel or update the UI as needed
                     }
                 } catch {
                     print("Failed to poll brightness: \(error)")
                 }
-                Thread.sleep(forTimeInterval: 0.5)
+                Thread.sleep(forTimeInterval: 0.4)
             }
         }
     }

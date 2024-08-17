@@ -14,11 +14,19 @@ enum SneakContentType {
     case backlight
     case music
     case mic
+    case battery
+    case download
 }
 
 struct SneakPeak {
     var show: Bool = false
     var type: SneakContentType = .music
+    var value: CGFloat = 0
+}
+
+struct ExpandedItem {
+    var show: Bool = false
+    var type: SneakContentType = .battery
     var value: CGFloat = 0
 }
 
@@ -53,6 +61,7 @@ class BoringViewModel: NSObject, ObservableObject {
     @Published var notchMetastability: Bool = true // True if notch not open
     @Published var settingsIconInNotch: Bool = true
     private var sneakPeakDispatch: DispatchWorkItem?
+    private var expandingViewDispatch: DispatchWorkItem?
     @Published var enableSneakPeek: Bool = false
     @Published var showCHPanel: Bool = false
     @Published var systemEventIndicatorShadow: Bool = true
@@ -69,13 +78,26 @@ class BoringViewModel: NSObject, ObservableObject {
                         self.toggleSneakPeak(status: false, type: SneakContentType.music)
                     }
                 }
-                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: sneakPeakDispatch!)
+            }
+        }
+    }
+    @Published var expandingView: ExpandedItem = ExpandedItem() {
+        didSet{
+            if expandingView.show {
+                expandingViewDispatch?.cancel()
+                
+                expandingViewDispatch = DispatchWorkItem { [weak self] in
+                    guard let self = self else { return }
+                        self.toggleExpandingView(status: false, type: SneakContentType.battery)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: expandingViewDispatch!)
             }
         }
     }
     @Published var maxClipboardRecords: Int = 1000;
     @Published var clipBoardHistoryDuration: Int = 30
+    @Published var enableDownloadListener: Bool = false
     
     deinit {
         destroy()
@@ -112,11 +134,26 @@ class BoringViewModel: NSObject, ObservableObject {
         }
     }
     
+    func toggleExpandingView(status: Bool, type: SneakContentType, value: CGFloat = 0) {
+        if self.expandingView.show {
+            withAnimation(self.animationLibrary.animation) {
+                self.expandingView.show = false;
+            }
+        }
+        DispatchQueue.main.async {
+            withAnimation(self.animationLibrary.animation) {
+                self.expandingView.show = status
+                self.expandingView.type = type
+                self.expandingView.value = value
+            }
+        }
+    }
+    
     func close(){
         self.notchState = .closed
     }
     
-    func openMenu(){
+    func openMenu() {
         self.currentView = .menu
     }
     

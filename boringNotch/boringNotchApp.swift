@@ -71,8 +71,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         OSDUIManager.start()
     }
     
+    func getAccessiblityPermission() {
+        let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as String: true] as CFDictionary
+        let accessibilityEnabled = AXIsProcessTrustedWithOptions(options)
+        
+        if !accessibilityEnabled {
+            let alert = NSAlert()
+            alert.messageText = "Accessibility permission needed"
+            alert.informativeText = "Please enable accessibility permissions for Boring Notch in System Preferences > Security & Privacy > Privacy > Accessibility"
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+        }
+    }
+    
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        
+        getAccessiblityPermission()
+        
+        OSDUIManager.stop()
+        
+        DisplayManager.setupListener(vm: vm)
+        
+        clipboardManager = ClipboardManager(vm: vm)
+        microphoneHandler = MicrophoneHandler(vm: vm)
+        
+        clipboardManager?.captureClipboardText()
+        
+        keyLightManager = KeyLightManager(vm: vm)
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(adjustWindowPosition),
@@ -80,13 +107,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             object: nil
         )
         
-        OSDUIManager.stop()
-        
-        
-        DisplayManager.setupListener(vm: vm)
-        
-        clipboardManager = ClipboardManager(vm: vm)
-        microphoneHandler = MicrophoneHandler(vm: vm)
         
         window = BoringNotchWindow(
             contentRect: NSRect(x: 0, y: 0, width: sizing.size.opened.width! + 20, height: sizing.size.opened.height! + 30), styleMask: [.borderless], backing: .buffered, defer: false
@@ -108,6 +128,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
     }
+    
+    @objc func permissionGranted(_ text: String = ""){
+        print("Permission granted", text)
+        
+    }
+    
     
     
     func playWelcomeSound() {

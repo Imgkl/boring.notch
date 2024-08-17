@@ -14,6 +14,7 @@ struct NotchContentView: View {
     @EnvironmentObject var volumeChangeListener: VolumeChangeListener
     var clipboardManager: ClipboardManager?
     @StateObject var microphoneHandler: MicrophoneHandler
+    @EnvironmentObject var downloadWatcher: DownloadWatcher
     
     var body: some View {
         VStack {
@@ -31,10 +32,10 @@ struct NotchContentView: View {
             if !vm.firstLaunch {
                 
                 HStack(spacing: 15) {
-                    if vm.notchState == .closed && batteryModel.showChargingInfo {
-                        Text("Charging").foregroundStyle(.white).padding(.leading, 4)
+                    if vm.notchState == .closed && vm.expandingView.show {
+                        Text(vm.expandingView.type == .battery ? "Charging" : "Downloading").foregroundStyle(.white).padding(.leading, 4)
                     }
-                    if !batteryModel.showChargingInfo && vm.currentView != .menu  {
+                    if !vm.expandingView.show && vm.currentView != .menu  {
                         
                         Image(nsImage: musicManager.albumArt)
                             .resizable()
@@ -129,33 +130,38 @@ struct NotchContentView: View {
                         Spacer()
                     }
                     
-                    if musicManager.isPlayerIdle == true && vm.notchState == .closed && !batteryModel.showChargingInfo && vm.nothumanface {
+                    if musicManager.isPlayerIdle == true && vm.notchState == .closed && !vm.expandingView.show && vm.nothumanface {
                         MinimalFaceFeatures().transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3))))
                     }
                     
                     
-                    if vm.currentView != .menu && vm.notchState == .closed && batteryModel.showChargingInfo {
-                        BoringBatteryView(batteryPercentage: batteryModel.batteryPercentage, isPluggedIn: batteryModel.isPluggedIn, batteryWidth: 30)}
+                    if vm.currentView != .menu && vm.notchState == .closed && vm.expandingView.show  {
+                        if vm.expandingView.type == .battery {
+                            BoringBatteryView(batteryPercentage: batteryModel.batteryPercentage, isPluggedIn: batteryModel.isPluggedIn, batteryWidth: 30)
+                        } else {
+                            HStack (spacing: 10){
+                                ProgressIndicator(type: .text, progress: 0.12, color: vm.accentColor)
+                                ProgressIndicator(type: .circle, progress: 0.12, color: vm.accentColor)
+                                
+                            }
+                        }
+                        
+                    }
                     
-                    if vm.notchState == .closed && !batteryModel.showChargingInfo && (musicManager.isPlaying || !musicManager.isPlayerIdle) {
+                    if vm.notchState == .closed && !vm.expandingView.show && (musicManager.isPlaying || !musicManager.isPlayerIdle) {
                         MusicVisualizer(avgColor: musicManager.avgColor, isPlaying: musicManager.isPlaying)
                             .frame(width: 30)
                     }
                     
                     if vm.notchState == .open {
-                        if vm.currentView != .clipboard
-                        {
-                            BoringSystemTiles(vm: vm, microphoneHandler:microphoneHandler).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1)))
-                        } else {
-                            ClipboardView(
-                                clipboardManager: clipboardManager!
-                            ).padding().transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1)))
-                        }
+                        
+                        BoringSystemTiles(vm: vm, microphoneHandler:microphoneHandler).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1)))
+                        
                     }
                 }
             }
             
-            if vm.notchState == .closed &&  vm.sneakPeak.show && !batteryModel.showChargingInfo {
+            if ((vm.notchState == .closed &&  vm.sneakPeak.show ) && (!vm.expandingView.show)) {
                 switch vm.sneakPeak.type {
                     case .music:
                         HStack() {
@@ -165,10 +171,9 @@ struct NotchContentView: View {
                                 .fontWeight(.regular)
                                 .foregroundColor(.gray)
                                 .lineLimit(1)
-                            
                             Spacer()
                         }
-                        .foregroundStyle(.gray, .gray).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1))).padding(.horizontal, 4).padding(.vertical, 2)
+                        .foregroundStyle(.gray, .gray).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.3)).delay(0.1))).padding(2)
                     case .volume:
                         SystemEventIndicatorModifier(eventType: .volume, value: $vm.sneakPeak.value, sendEventBack: {
                             print("Volume changed")
@@ -184,12 +189,25 @@ struct NotchContentView: View {
                         .padding([.leading, .top], musicManager.isPlaying ? 4 : 0)
                         .padding(.trailing, musicManager.isPlaying ? 8 : 4)
                     case .backlight:
-                        EmptyView()/*.systemEventIndicator(for: .backlight, value: 0.40).padding(.vertical, 4)*/
+                        SystemEventIndicatorModifier(eventType: .backlight, value: $vm.sneakPeak.value, sendEventBack: {
+                            print("Volume changed")
+                        })
+                        .transition(.opacity.combined(with: .blurReplace))
+                        .padding([.leading, .top], musicManager.isPlaying ? 4 : 0)
+                        .padding(.trailing, musicManager.isPlaying ? 8 : 4)
                     case .mic:
                         SystemEventIndicatorModifier(eventType: .mic, value: $vm.sneakPeak.value, sendEventBack: {
                             print("Volume changed")
-                        })
+                        }).transition(.opacity.combined(with: .blurReplace))
+                            .padding([.leading, .top], musicManager.isPlaying ? 4 : 0)
+                            .padding(.trailing, musicManager.isPlaying ? 8 : 4)
+                    default:
+                        EmptyView()
                 }
+            }
+            
+            if vm.notchState == .open {
+                DownloadArea().padding(.vertical, 10).padding(.horizontal, 4).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.5)))).environmentObject(downloadWatcher)
             }
         }
         .frame(width: calculateFrameWidthforNotchContent())
@@ -198,8 +216,8 @@ struct NotchContentView: View {
     
     func calculateFrameWidthforNotchContent() -> CGFloat? {
             // Calculate intermediate values
-        let chargingInfoWidth: CGFloat = batteryModel.showChargingInfo ? 160 : 0
-        let musicPlayingWidth: CGFloat = (!vm.firstLaunch && !batteryModel.showChargingInfo && (musicManager.isPlaying || (musicManager.isPlayerIdle ? vm.nothumanface : true))) ? 60 : -15
+        let chargingInfoWidth: CGFloat = vm.expandingView.show ? 160 : 0
+        let musicPlayingWidth: CGFloat = (!vm.firstLaunch && !vm.expandingView.show && (musicManager.isPlaying || (musicManager.isPlayerIdle ? vm.nothumanface : true))) ? 60 : -15
         
         let closedWidth: CGFloat = vm.sizes.size.closed.width! - 10
         
@@ -210,5 +228,5 @@ struct NotchContentView: View {
 }
 
 #Preview {
-    BoringNotch(vm: BoringViewModel(), batteryModel: BatteryStatusViewModel(vm: .init()), onHover: onHover, clipboardManager: ClipboardManager(vm: .init()), microphoneHandler: MicrophoneHandler(vm:.init())).frame(width: 600, height: 500)
+    BoringNotch(vm: BoringViewModel(), batteryModel: BatteryStatusViewModel(vm: .init()), onHover: onHover, clipboardManager: ClipboardManager(vm: .init()), microphoneHandler: MicrophoneHandler(vm:.init())).frame(width: 600)
 }

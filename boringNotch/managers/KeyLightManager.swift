@@ -7,27 +7,31 @@
 
 import Foundation
 import IOKit
-
+import KeyboardShortcuts
 
 class KeyLightManager: ObservableObject {
+    private var vm: BoringViewModel?
     var service: io_service_t = IO_OBJECT_NULL
+    private var first_time:Bool = true
     
-    @Published var current_brightness: Int32 = 255 {
-        didSet {
-            print("current_brightness updated to: \(current_brightness)")
-            current_brightness_progress = Float(current_brightness) / 255
-        }
-    }
+    @Published var current_brightness: Int32 = 255
     @Published var current_brightness_progress: Float = 0.0 {
         didSet {
-            print("current_brightness_progress updated to: \(current_brightness_progress)")
-        }
+            if(!first_time){
+                current_brightness = Int32(current_brightness_progress * 255)
+                self.vm?.toggleSneakPeak(status: true, type: .backlight, value: CGFloat(self.current_brightness_progress))
+                
+            }
+           }
     }
     
-    init() {
+    init(vm: BoringViewModel) {
+        self.vm = vm;
         registerService()
         if (self.keyboardHasBacklight()){
             KeyboardManager.configure()
+            current_brightness_progress = Float(getBrightness())
+            setupListners()
         }
     }
     
@@ -46,6 +50,21 @@ class KeyLightManager: ObservableObject {
             return;
         }
         self.service = service
+    }
+    
+    func setupListners() {
+       
+        KeyboardShortcuts.onKeyDown(for: .decreaseBacklight) {
+            print("Somee  sds")
+            self.current_brightness = max(0, self.current_brightness - 32)
+            self.setKeyboardBacklight(brightness: Float(self.current_brightness) / 255)
+        }
+        
+        KeyboardShortcuts.onKeyDown(for: .increaseBacklight) {
+            print("Im logging it up")
+            self.current_brightness = min(255, self.current_brightness + 32)
+            self.setKeyboardBacklight(brightness: Float(self.current_brightness) / 255)
+        }
     }
     
     func keyboardHasBacklight() -> Bool {
@@ -69,6 +88,7 @@ class KeyLightManager: ObservableObject {
     }
     
     func setKeyboardBacklight(brightness: Float) {
+        self.first_time = false
         BrightnessControl.setBrightness(brightness)
         self.current_brightness_progress = brightness
     }

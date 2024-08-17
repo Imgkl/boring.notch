@@ -40,9 +40,7 @@ struct ContentView: View {
                 .disabled(true)
 #endif
                 .keyboardShortcut("E", modifiers: .command)
-            }.onHover(perform: { hovering in
-                clipboardManager?.captureClipboardText()
-            })
+            }
             .floatingPanel(isPresented: $vm.showCHPanel) {
                 ClipboardView(clipboardManager: clipboardManager!).onAppear(){
                     clipboardManager?.loadClipboardItems()

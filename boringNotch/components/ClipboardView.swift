@@ -14,13 +14,16 @@ private var appIcons: AppIcons = AppIcons()
 struct CopiedItemView: View {
     let item: ClipboardItemStruct
     var body: some View {
-        if item.isImage() {
-            Image(nsImage: item.getImage()!)
-                .resizable()
-                .scaledToFit()
-        } else {
-            Text(item.getAttributedString()?.string ?? "")
+        VStack {
+            if item.isImage() {
+                Image(nsImage: item.getImage()!)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                Text(item.getAttributedString()?.string ?? "")
+            }
         }
+        
     }
 }
 
@@ -97,7 +100,7 @@ struct ClipboardItemUI: View {
 
 
 struct ClipboardView: View {
-    var clipboardManager: ClipboardManager
+    @StateObject var clipboardManager: ClipboardManager
     @EnvironmentObject var vm: BoringViewModel
     @State private var showAlert: Bool = false
     
@@ -108,6 +111,15 @@ struct ClipboardView: View {
                 Spacer()
                 
                 Group {
+                    TextField("Search", text: $clipboardManager.searchQuery)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .controlSize(.extraLarge)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(.textColor).opacity(0.1))
+                        )
                     Button {
                         showAlert = true
                     } label: {
@@ -124,22 +136,22 @@ struct ClipboardView: View {
             }
             .padding()
             Group {
-                if self.clipboardManager.clipboardItems.count == 0 {
+                if self.clipboardManager.searchResults.count == 0 {
                     ContentUnavailableView("Clipboard history is empty",
                                            systemImage: "clipboard",
                                            description: Text("Keep using the app and your copied content will be shown here"))
                 } else {
                     ScrollView(.horizontal, showsIndicators: !vm.clipboardHistoryHideScrollbar) {
                         HStack(spacing: 20) {
-                            ForEach(0..<self.clipboardManager.clipboardItems.count, id: \.self) { index in
+                            ForEach(0..<self.clipboardManager.searchResults.count, id: \.self) { index in
                                 ClipboardItemUI(
-                                    item: self.clipboardManager.clipboardItems[index],
+                                    item: self.clipboardManager.searchResults[index],
                                     onClick: {
-                                        self.clipboardManager.copyItem(self.clipboardManager.clipboardItems[index])
+                                        self.clipboardManager.copyItem(self.clipboardManager.searchResults[index])
                                     }
                                 )
                                 .padding(.leading, index == 0 ? nil : 0)
-                                .padding(.trailing, (index == self.clipboardManager.clipboardItems.count - 1) ? nil : 0)
+                                .padding(.trailing, (index == self.clipboardManager.searchResults.count - 1) ? nil : 0)
                             }
                         }
                         .padding(.bottom)
@@ -158,12 +170,14 @@ struct ClipboardView: View {
         } message: {
             Text("This action cannot be undone")
                 .foregroundStyle(.secondary)
-        }
+        }.onAppear(perform: {
+            clipboardManager.captureClipboardText()
+        }).onDisappear(perform: {
+            clipboardManager.searchQuery = ""
+        })
     }
 }
 
-struct ClipboardView_Previews: PreviewProvider {
-    static var previews: some View {
-        ClipboardView(clipboardManager:ClipboardManager(vm:.init())).frame(width: .infinity, height: .infinity).padding()
-    }
+#Preview {
+    ClipboardView(clipboardManager: ClipboardManager(vm: BoringViewModel())).frame(width: .infinity, height: 300).padding().environmentObject(BoringViewModel())
 }

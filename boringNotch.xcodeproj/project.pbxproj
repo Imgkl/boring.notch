@@ -56,6 +56,7 @@
 		14D570CD2C5F4BB70011E668 /* BoringBattery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570CC2C5F4BB70011E668 /* BoringBattery.swift */; };
 		14D570D22C5F6C6A0011E668 /* BoringExtrasMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570D12C5F6C6A0011E668 /* BoringExtrasMenu.swift */; };
 		14D570D52C5F710B0011E668 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D570D42C5F710B0011E668 /* constants.swift */; };
+		14E9FEAA2C70BF610062E83F /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9FEA92C70BF610062E83F /* DownloadView.swift */; };
 		B10F849F2C6B5BCC009F3026 /* NotchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10F849E2C6B5BCC009F3026 /* NotchContentView.swift */; };
 		B10F84A32C6C9596009F3026 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10F84A22C6C9596009F3026 /* TestView.swift */; };
 		B15063522C63D41A00EBB0E3 /* Image2Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15063512C63D41A00EBB0E3 /* Image2Color.swift */; };
@@ -152,6 +153,7 @@
 		14D570CC2C5F4BB70011E668 /* BoringBattery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoringBattery.swift; sourceTree = "<group>"; };
 		14D570D12C5F6C6A0011E668 /* BoringExtrasMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoringExtrasMenu.swift; sourceTree = "<group>"; };
 		14D570D42C5F710B0011E668 /* constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
+		14E9FEA92C70BF610062E83F /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		B10F849E2C6B5BCC009F3026 /* NotchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchContentView.swift; sourceTree = "<group>"; };
 		B10F84A22C6C9596009F3026 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		B15063512C63D41A00EBB0E3 /* Image2Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image2Color.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				B1C974332C642B6D0000E707 /* MarqueeTextView.swift */,
 				B1D365CD2C6A979C0047BDBC /* LiveActivityModifier.swift */,
 				B1D365CF2C6A9A6C0047BDBC /* SystemEventIndicatorModifier.swift */,
+				14E9FEA92C70BF610062E83F /* DownloadView.swift */,
 			);
 			path = "Live activities";
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				B1B112932C6A577E00093D8F /* MouseTracker.swift in Sources */,
 				14A7E5882C64A89C008C1BE9 /* HelloAnimation.swift in Sources */,
 				14288E0A2C6F34AC00B9F80C /* KeyCode.swift in Sources */,
+				14E9FEAA2C70BF610062E83F /* DownloadView.swift in Sources */,
 				B1B112912C6A572100093D8F /* EditPanelView.swift in Sources */,
 				14288E002C6E9F4500B9F80C /* MicrophoneManager.swift in Sources */,
 				14D570C92C5F38890011E668 /* BoringViewModel.swift in Sources */,
@@ -740,7 +744,7 @@
 				CURRENT_PROJECT_VERSION = "1.9+1";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = 342QMGS27Q;
+				DEVELOPMENT_TEAM = JPWMG84CH8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -784,7 +788,7 @@
 				CURRENT_PROJECT_VERSION = "1.9+1";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"boringNotch/Preview Content\"";
-				DEVELOPMENT_TEAM = 342QMGS27Q;
+				DEVELOPMENT_TEAM = JPWMG84CH8;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

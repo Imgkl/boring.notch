@@ -11,16 +11,23 @@ struct DownloadFile: Identifiable {
 
 
 class DownloadWatcher: ObservableObject {
-    @Published var downloadFiles: [DownloadFile] = []
+    @Published var downloadFiles: [DownloadFile] = [] {
+        didSet {
+            if !downloadFiles.isEmpty {
+                vm?.toggleSneakPeak(status: true, type: .download)
+            }
+        }
+    }
+    var vm: BoringViewModel?
     private var watcher: DispatchSourceFileSystemObject?
     private let folderURL: URL
     private var timer: Timer?
     
     
-    init(folderPath: URL?) {
+    init(folderPath: URL?, vm: BoringViewModel) {
         let folders:[String] = NSSearchPathForDirectoriesInDomains(.downloadsDirectory, .userDomainMask, true)
         let defaultPath = URL(fileURLWithPath: folders.first!).resolvingSymlinksInPath()
-        
+        self.vm = vm
         self.folderURL = defaultPath
         startWatching()
     }
@@ -43,27 +50,19 @@ class DownloadWatcher: ObservableObject {
                     print("Helo", fileSize, file)
                     
                     
-                                            if fileSize == 0 {
-                        //
-                    let pList:URL = NSURL(fileURLWithPath: "~/Library/Safari/Downloads.plist").filePathURL!
-                        //
-                        //                        let filePermissionManager = FilePermissionManager(filePath: pList)
-                        //
-                        //                        filePermissionManager.requestPermission { granted in
-                        //
-                    do {
-                        print(pList)
-                        let download = try SafariDownloadModel(url:pList, noObservation: true)
-                        print(download)
-                        fileSize = Int64(download.bytesTotal)
-                        bytesDownloaded = Int64(download.bytesDownloaded)
-                    } catch {
-                        print("Error decoding plist: \(error)")
-                        fileSize = 0
+                    if fileSize == 0 {
+                        let pList:URL = NSURL(fileURLWithPath: "~/Library/Safari/Downloads.plist").filePathURL!
+                        do {
+                            print(pList)
+                            let download = try SafariDownloadModel(url:pList, noObservation: true)
+                            print(download)
+                            fileSize = Int64(download.bytesTotal)
+                            bytesDownloaded = Int64(download.bytesDownloaded)
+                        } catch {
+                            print("Error decoding plist: \(error)")
+                            fileSize = 0
+                        }
                     }
-                                                }
-                        //
-                        //                    }
                     
                     if fileSize == 0 {
                         continue
@@ -106,66 +105,39 @@ class DownloadWatcher: ObservableObject {
         do {
             let fileManager = FileManager.default
             let folderContents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: [.creationDateKey, .fileSizeKey], options: [.skipsHiddenFiles]).filter { $0.lastPathComponent.contains("crdownload") || $0.lastPathComponent.contains("download") }
-                return folderContents
-            } catch {
-                NSLog("Error: %@","\(error)")
-                return nil
-            }
+            return folderContents
+        } catch {
+            NSLog("Error: %@","\(error)")
+            return nil
         }
+    }
+    
+    func calculateProgress(bytesDownloaded: Int64, totalSize: Int64) -> Double {
+        guard totalSize > 0 else { return 0.0 }
+        let progress = (Double(bytesDownloaded) / Double(totalSize)) * 100
+        return progress
+    }
+    
+    private func checkForNewDownloads() {
+        let contents:[URL]? = getContentsOfFolder(folderURL: folderURL, types: ["crdownload", "download"])
         
-        func calculateProgress(bytesDownloaded: Int64, totalSize: Int64) -> Double {
-            guard totalSize > 0 else { return 0.0 }
-            let progress = (Double(bytesDownloaded) / Double(totalSize)) * 100
-            return progress
-        }
-        
-        private func checkForNewDownloads() {
-            let contents:[URL]? = getContentsOfFolder(folderURL: folderURL, types: ["crdownload", "download"])
-            
-            if let contents = contents {
-                for file in contents {
-                    
-                    let totalSize = (try? file.resourceValues(forKeys: [.fileSizeKey]))?.fileSize ?? 0
-                    let newFile = DownloadFile(id: UUID(), url: file, totalSize: Int64(totalSize))
-                    
-                    print("New file: \(newFile)")
-                    
-                    DispatchQueue.main.async {
-                        if !self.downloadFiles.contains(where: { $0.url == newFile.url }) {
-                            self.downloadFiles.append(newFile)
-                            if self.timer == nil {
-                                self.startProgressTimer()
-                            }
+        if let contents = contents {
+            for file in contents {
+                
+                let totalSize = (try? file.resourceValues(forKeys: [.fileSizeKey]))?.fileSize ?? 0
+                let newFile = DownloadFile(id: UUID(), url: file, totalSize: Int64(totalSize))
+
+                
+                DispatchQueue.main.async {
+                    if !self.downloadFiles.contains(where: { $0.url == newFile.url }) {
+                        self.downloadFiles.append(newFile)
+                        if self.timer == nil {
+                            self.startProgressTimer()
                         }
                     }
                 }
             }
-            
-        }
-    }
-    
-    struct DownloadArea: View {
-        @StateObject private var watcher: DownloadWatcher
-        
-        init() {
-            _watcher = StateObject(wrappedValue: DownloadWatcher(folderPath: nil))
         }
         
-        var body: some View {
-            VStack {
-                
-                ForEach(watcher.downloadFiles) { file in
-                    HStack {
-                        Text(file.url.lastPathComponent)
-                        Spacer()
-                        Text("\(file.progress)")
-                    }
-                }
-            }
-            .frame(minWidth: 300, minHeight: 200)
-        }
     }
-    
-    #Preview{
-        DownloadArea()
-    }
+}

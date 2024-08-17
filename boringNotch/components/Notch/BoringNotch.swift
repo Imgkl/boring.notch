@@ -41,7 +41,7 @@ struct BoringNotch: View {
         
         let notchWidth: CGFloat = vm.notchState == .open
         ? vm.sizes.size.opened.width!
-        : batteryModel.showChargingInfo
+        : vm.expandingView.show
         ? baseWidth + 160
         : CGFloat(vm.firstLaunch ? 50 : 0) + baseWidth + (isFaceVisible ? 65 : 0)
         
@@ -52,8 +52,8 @@ struct BoringNotch: View {
         Rectangle()
             .foregroundColor(.black)
             .mask(NotchShape(cornerRadius: vm.notchState == .open ? vm.sizes.cornerRadius.opened.inset : (vm.sneakPeak.show ? 4 : 0) + vm.sizes.cornerRadius.closed.inset!))
-            .frame(width: calculateNotchWidth(), height: vm.notchState == .open ? (vm.sizes.size.opened.height!) : vm.sizes.size.closed.height! + (hoverAnimation ? 8 : !batteryModel.showChargingInfo && vm.sneakPeak.show ? 35 : 0))
-            .animation(notchAnimation, value: batteryModel.showChargingInfo)
+            .frame(width: calculateNotchWidth(), height: vm.notchState == .open ? (vm.sizes.size.opened.height!) : vm.sizes.size.closed.height! + (hoverAnimation ? 8 : !vm.expandingView.show && vm.sneakPeak.show ? 35 : 0))
+            .animation(notchAnimation, value: vm.expandingView.show)
             .animation(notchAnimation, value: musicManager.isPlaying)
             .animation(notchAnimation, value: musicManager.lastUpdated)
             .animation(notchAnimation, value: musicManager.isPlayerIdle)
@@ -61,6 +61,7 @@ struct BoringNotch: View {
             .animation(notchAnimation, value: vm.sneakPeak.show)
             .overlay {
                 NotchContentView(clipboardManager: clipboardManager, microphoneHandler: microphoneHandler)
+                    .environmentObject(DownloadWatcher(folderPath: nil, vm: vm))
                     .environmentObject(vm)
                     .environmentObject(musicManager)
                     .environmentObject(batteryModel)
@@ -90,15 +91,6 @@ struct BoringNotch: View {
             }
             .shadow(color: vm.notchState == .open ? .black : hoverAnimation ? .black.opacity(0.5) : .clear, radius: 10)
             .sensoryFeedback(.levelChange, trigger: haptics)
-            .onChange(of: batteryModel.isPluggedIn, { oldValue, newValue in
-                withAnimation(.spring(response: 1, dampingFraction: 0.8, blendDuration: 0.7)) {
-                    if newValue {
-                        batteryModel.showChargingInfo = true
-                    } else {
-                        batteryModel.showChargingInfo = false
-                    }
-                }
-            })
             .environmentObject(vm)
     }
     

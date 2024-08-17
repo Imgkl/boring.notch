@@ -7,6 +7,8 @@
 
 import Foundation
 import AppKit
+import Combine
+import KeyboardShortcuts
 
 struct ClipboardItemStruct {
     let content: Data
@@ -21,6 +23,8 @@ struct ClipboardItemStruct {
             return try? NSAttributedString(data: content, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
         } else if type == .string {
             return NSAttributedString(string: String(data: content, encoding: .utf8) ?? "")
+        } else if type == .fileURL {
+            return NSAttributedString(string: String(data: content, encoding: .utf8) ?? "")
         }
         return nil
     }
@@ -31,7 +35,7 @@ struct ClipboardItemStruct {
         } else if type == .png {
             return NSImage(data: content)
         }
-        return nil
+        return NSImage()
     }
     
     func isImage() -> Bool {
@@ -39,20 +43,30 @@ struct ClipboardItemStruct {
     }
     
     func isText() -> Bool {
-        return type == .string
+        return type == .string || type == .html || type == .rtf || type == .fileURL
     }
 }
 
-class ClipboardManager {
+class ClipboardManager : ObservableObject {
     
     private var vm: BoringViewModel?
-    
-    var clipboardItems: [ClipboardItemStruct] = []
+    var clipboardItems: [ClipboardItemStruct] = [] {
+        didSet {
+            if self.searchQuery.isEmpty {
+                self.searchResults = clipboardItems
+            }
+        }
+    }
     let maxRecords: Int
     private let plistFileName = "ClipboardManager.plist"
     private var changeCount = 0
     private var clipboard = NSPasteboard.general
     private var eventMonitor: Any?
+    @Published var searchResults: [ClipboardItemStruct] = []
+    @Published var searchQuery: String = "" // Search query
+    private var cancellables = Set<AnyCancellable>()
+    
+    
     private let supportedTypes: Set<NSPasteboard.PasteboardType> = [
         .fileURL,
         .html,
@@ -78,6 +92,15 @@ class ClipboardManager {
         self.maxRecords = vm.maxClipboardRecords
         loadClipboardItems()
         startMonitoring()
+        
+            // Listen to searchQuery changes and debounce
+        $searchQuery
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] query in
+                self?.fuzzySearch(query)
+            }
+            .store(in: &cancellables)
     }
     
     func clearHistory() {
@@ -89,6 +112,28 @@ class ClipboardManager {
         clipboard.clearContents()
         clipboard.setString(item, forType: .string)
     }
+    
+    func fuzzySearch(_ query: String) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            var results: [ClipboardItemStruct]
+            
+            if query.isEmpty {
+                results = self.clipboardItems
+            } else {
+                results = self.clipboardItems.filter { item in
+                    let content = item.getAttributedString()?.string ?? ""
+                    return content.range(of: query, options: .caseInsensitive) != nil
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.searchResults = results
+            }
+        }
+    }
+    
     
     func startMonitoring() {
         
@@ -115,12 +160,11 @@ class ClipboardManager {
         
         let itemType = item.availableType(from: item.types) ?? .string
         
-        let itemData: Data = item.data(forType: itemType) ?? Data()
+        var itemData: Data = item.data(forType: itemType) ?? Data()
         
         let sourceAppBundle = sourceApp?.bundleIdentifier?.lowercased()
         
         if !alreadyExists(itemData) {
-                // Add item to the clipboard items
             clipboardItems.insert(ClipboardItemStruct(content: itemData, type: itemType, sourceAppBundle: sourceAppBundle, date: Date()), at: 0)
             
                 // Trim the list if it exceeds the max number of records
@@ -139,32 +183,34 @@ class ClipboardManager {
     
         // Method to capture text from the clipboard and add to history
     func captureClipboardText() {
-        if self.clipboard.changeCount != changeCount {
-            for item in self.clipboard.pasteboardItems ?? [] {
-                let sourceAppBundle = sourceApp?.bundleIdentifier
-                
-                    // ignore if the source app is the same as the current app
-                
-                if sourceAppBundle == Bundle.main.bundleIdentifier {
-                    return;
+        DispatchQueue.main.async {
+            if self.clipboard.changeCount != self.changeCount {
+                for item in self.clipboard.pasteboardItems ?? [] {
+                    let sourceAppBundle = self.sourceApp?.bundleIdentifier
+                    
+                        // ignore if the source app is the same as the current app
+                    
+                    if sourceAppBundle == Bundle.main.bundleIdentifier {
+                        return;
+                    }
+                    
+                        // Reading types on NSPasteboard gives all the available
+                        // types - even the ones that are not present on the NSPasteboardItem.
+                        // See https://github.com/p0deje/Maccy/issues/241.
+                    if self.shouldIgnore(Set(self.clipboard.types ?? [])) {
+                        return
+                    }
+                    
+                    let types = Set(item.types)
+                    if types.contains(.string) && self.isEmptyString(item) && !self.richText(item) {
+                        return
+                    }
+                    
+                    self.addClipboardItem(item)
                 }
                 
-                    // Reading types on NSPasteboard gives all the available
-                    // types - even the ones that are not present on the NSPasteboardItem.
-                    // See https://github.com/p0deje/Maccy/issues/241.
-                if shouldIgnore(Set(self.clipboard.types ?? [])) {
-                    return
-                }
-                
-                let types = Set(item.types)
-                if types.contains(.string) && isEmptyString(item) && !richText(item) {
-                    return
-                }
-                
-                addClipboardItem(item)
+                self.changeCount = self.clipboard.changeCount
             }
-            
-            changeCount = clipboard.changeCount
         }
     }
     

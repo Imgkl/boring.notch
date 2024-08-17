@@ -106,15 +106,13 @@ struct SettingsView: View {
     func Downloads() -> some View {
         Form {
             Section {
-                Toggle("Show download progress", isOn: .constant(false))
-                    .disabled(true)
+                Toggle("Show download progress", isOn: $vm.enableDownloadListener)
                 Picker("Download indicator style", selection: $vm.selectedDownloadIndicatorStyle) {
                     Text("Progress bar")
                         .tag(DownloadIndicatorStyle.progress)
                     Text("Percentage")
                         .tag(DownloadIndicatorStyle.percentage)
                 }
-                .disabled(true)
                 Picker("Download icon style", selection: $vm.selectedDownloadIconStyle) {
                     Text("Only app icon")
                         .tag(DownloadIconStyle.onlyAppIcon)
@@ -123,7 +121,6 @@ struct SettingsView: View {
                     Text("Both")
                         .tag(DownloadIconStyle.iconAndAppIcon)
                 }
-                .disabled(true)
                 
             } header: {
                 HStack {
@@ -178,14 +175,20 @@ struct SettingsView: View {
                 Toggle("Enable HUD replacement", isOn: .constant(false))
                 Toggle("Enable glowing effect", isOn: $vm.systemEventIndicatorShadow.animation())
                 Toggle("Use accent color", isOn: $vm.systemEventIndicatorUseAccent.animation())
-                if false {
-                    Toggle("Use album art color during playback", isOn: .constant(false))
-                }
             } header: {
                 HStack {
                     Text("Customization")
                     comingSoonTag()
                 }
+            }
+            
+            Section {
+                KeyboardShortcuts.Recorder("Microphone toggle shortcut", name: .toggleMicrophone)
+                VStack {
+                    KeyboardShortcuts.Recorder("Keyboard backlight up", name: .decreaseBacklight)
+                    KeyboardShortcuts.Recorder("Keyboard backlight down", name: .increaseBacklight)}
+            } header :{
+                Text("Keyboard shortcuts")
             }
         }
     }
@@ -369,11 +372,11 @@ struct SettingsView: View {
                 }
                 
             }
-            #if DEBUG
+#if DEBUG
             .disabled(false)
-            #else
+#else
             .disabled(true)
-            #endif
+#endif
         }
     }
     

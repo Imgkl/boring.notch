@@ -5,6 +5,7 @@ import AppKit
 public class SafariDownloadModel: ObservableObject {
     public enum Error: LocalizedError {
         case openFileHandleFailed(URL, code: Int32)
+        case noFolderPermission(URL)
     }
     
     @Published public var bytesDownloaded: Int
@@ -21,30 +22,40 @@ public class SafariDownloadModel: ObservableObject {
     private let decoder = PropertyListDecoder()
     
     public init(url: URL, noObservation: Bool = false) throws {
-        
-        
-        
-        plistURL = NSURL(fileURLWithPath: "/Library/Safari/Downloads.plist").filePathURL!
-        
-        let plist = try decoder.decode(DownloadPlist.self, from: Data(contentsOf: plistURL))
-        bytesDownloaded = plist.DownloadEntryProgressBytesSoFar
-        bytesTotal = plist.DownloadEntryProgressTotalToLoad
-        fileURL = URL(fileURLWithPath: plist.DownloadEntryPath)
-        guard let url = URL(string: plist.DownloadEntryURL) else {
+        let plist = try decoder.decode(DownloadPlist.self, from: Data(contentsOf: url))
+        self.bytesDownloaded = plist.DownloadEntryProgressBytesSoFar
+        self.bytesTotal = plist.DownloadEntryProgressTotalToLoad
+        self.fileURL = URL(fileURLWithPath: plist.DownloadEntryPath)
+        guard let originURL = URL(string: plist.DownloadEntryURL) else {
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(codingPath: [], debugDescription: "DownloadEntryURL: Not a valid URL string")
             )
         }
-        print(plist)
-        originURL = url
-        dateAdded = plist.DownloadEntryDateAddedKey
-        id = plist.DownloadEntryIdentifier
-        sandboxID = plist.DownloadEntrySandboxIdentifier
+        self.originURL = originURL
+        self.dateAdded = plist.DownloadEntryDateAddedKey
+        self.id = plist.DownloadEntryIdentifier
+        self.sandboxID = plist.DownloadEntrySandboxIdentifier
         
-        // Initialize with actual file size if available
-        updateFileSize()
+            // Set the plist URL
+        self.plistURL = url
         
-        guard !noObservation else { return }
+            // Check for folder permission before proceeding
+        try checkFolderPermission(for: plistURL)
+        
+            // Initialize with actual file size if available
+        self.updateFileSize()
+        
+            // Set up observation unless it's disabled
+        if !noObservation {
+            try observeFileChanges()
+        }
+    }
+    
+    deinit {
+        source?.cancel()
+    }
+    
+    private func observeFileChanges() throws {
         let fileDescriptor = open(plistURL.path, O_EVTONLY)
         if fileDescriptor == -1 {
             throw Error.openFileHandleFailed(plistURL, code: Darwin.errno)
@@ -55,20 +66,16 @@ public class SafariDownloadModel: ObservableObject {
             queue: .main
         )
         source.setEventHandler { [weak self] in
-            guard let self else { return }
+            guard let self = self else { return }
             let event = source.data
-            process(event: event)
+            self.process(event: event)
         }
         source.setCancelHandler {
             close(fileDescriptor)
         }
         source.resume()
+        self.source = source
     }
-    
-    deinit {
-        source?.cancel()
-    }
-    
     
     private func process(event: DispatchSource.FileSystemEvent) {
         if event.contains(.delete) {
@@ -85,7 +92,7 @@ public class SafariDownloadModel: ObservableObject {
         bytesDownloaded = plist.DownloadEntryProgressBytesSoFar
         bytesTotal = plist.DownloadEntryProgressTotalToLoad
         
-        // Update with actual file size
+            // Update with actual file size
         updateFileSize()
     }
     
@@ -93,6 +100,7 @@ public class SafariDownloadModel: ObservableObject {
         do {
             let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
             let fileSize = attributes[.size] as? Int64 ?? 0
+            print("Helo", fileSize, fileURL)
             if fileSize > 0 {
                 bytesDownloaded = Int(fileSize)
                 if bytesTotal == 0 {
@@ -101,6 +109,14 @@ public class SafariDownloadModel: ObservableObject {
             }
         } catch {
             print("Error getting file attributes: \(error)")
+        }
+    }
+    
+    private func checkFolderPermission(for url: URL) throws {
+        let folderURL = url.deletingLastPathComponent()
+        let fileManager = FileManager.default
+        if !fileManager.isReadableFile(atPath: folderURL.path) {
+            throw Error.noFolderPermission(folderURL)
         }
     }
 }

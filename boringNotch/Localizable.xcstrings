@@ -23,9 +23,6 @@
     "%d%%" : {
 
     },
-    "%lf" : {
-
-    },
     "%lld%%" : {
 
     },
@@ -54,6 +51,9 @@
 
     },
     "1 year" : {
+
+    },
+    "12%" : {
 
     },
     "About" : {
@@ -222,6 +222,9 @@
     "Delete all" : {
 
     },
+    "Download" : {
+
+    },
     "Download icon style" : {
       "localizations" : {
         "en" : {
@@ -243,6 +246,9 @@
       }
     },
     "Download indicators" : {
+
+    },
+    "Downloading" : {
 
     },
     "Downloads" : {
@@ -303,6 +309,9 @@
         }
       }
     },
+    "Filename.mp4" : {
+
+    },
     "General" : {
       "localizations" : {
         "en" : {
@@ -332,6 +341,9 @@
     "HUDs" : {
 
     },
+    "In progress" : {
+
+    },
     "Install updates automatically" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -347,6 +359,15 @@
 
     },
     "Keep using the app and your copied content will be shown here" : {
+
+    },
+    "Keyboard backlight down" : {
+
+    },
+    "Keyboard backlight up" : {
+
+    },
+    "Keyboard shortcuts" : {
 
     },
     "Made with 🫶🏻 by not so boring not.people" : {
@@ -400,6 +421,9 @@
       }
     },
     "Mic %@" : {
+
+    },
+    "Microphone toggle shortcut" : {
 
     },
     "Minimum hover duration" : {
@@ -490,6 +514,9 @@
           }
         }
       }
+    },
+    "Search" : {
+
     },
     "seconds" : {
       "extractionState" : "stale",
@@ -582,9 +609,6 @@
 
     },
     "Use accent color" : {
-
-    },
-    "Use album art color during playback" : {
 
     },
     "Version" : {
