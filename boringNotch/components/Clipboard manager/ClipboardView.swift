@@ -1,9 +1,9 @@
-    //
-    //  ClipboardView.swift
-    //  boringNotch
-    //
-    //  Created by Harsh Vardhan  Goswami  on 16/08/24.
-    //
+//
+//  ClipboardView.swift
+//  boringNotch
+//
+//  Created by Harsh Vardhan  Goswami  on 16/08/24.
+//
 
 import Foundation
 import SwiftUI
@@ -103,23 +103,16 @@ struct ClipboardView: View {
     @StateObject var clipboardManager: ClipboardManager
     @EnvironmentObject var vm: BoringViewModel
     @State private var showAlert: Bool = false
+    @State var isExpanded: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 10) {
+                ExpandingSearch(isExpanded: $isExpanded, text: $clipboardManager.searchQuery)
                 
                 Spacer()
                 
                 Group {
-                    TextField("Search", text: $clipboardManager.searchQuery)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .controlSize(.extraLarge)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color(.textColor).opacity(0.1))
-                        )
                     Button {
                         showAlert = true
                     } label: {
@@ -143,7 +136,7 @@ struct ClipboardView: View {
                 } else {
                     ScrollViewReader { reader in
                         ScrollView(.horizontal, showsIndicators: !vm.clipboardHistoryHideScrollbar) {
-                            HStack(spacing: 20) {
+                            LazyHStack(spacing: 20) {
                                 ForEach(0..<self.clipboardManager.searchResults.count, id: \.self) { index in
                                     ClipboardItemUI(
                                         item: self.clipboardManager.searchResults[index],
@@ -161,6 +154,7 @@ struct ClipboardView: View {
                             if !vm.clipboardHistoryPreserveScrollPosition {
                                 reader.scrollTo(0)
                             }
+                            isExpanded = false
                         }
                     }
                     .frame(maxHeight: .infinity)
@@ -181,6 +175,57 @@ struct ClipboardView: View {
             clipboardManager.captureClipboardText()
         }).onDisappear(perform: {
             clipboardManager.searchQuery = ""
+        })
+    }
+}
+
+struct ExpandingSearch: View {
+    @Binding var isExpanded: Bool
+    @State private var hovered: Bool = false
+    @Binding var text: String
+    @FocusState var inputFocus
+    var body: some View {
+        HStack {
+            if isExpanded {
+                TextField("Search", text: $text)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .frame(maxWidth: 200)
+                    .focused($inputFocus)
+            } else {
+                Text("Search")
+                    .opacity(0.7)
+            }
+            Image(systemName: "magnifyingglass")
+                .opacity(0.7)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(.textColor).opacity((isExpanded || hovered) ? 0.1 : 0))
+        )
+        .onTapGesture {
+            withAnimation(.smooth) {
+                isExpanded = true
+                inputFocus = true
+            }
+        }
+        .onContinuousHover { phase in
+            switch phase {
+                case .active:
+                    withAnimation(.smooth) {
+                        hovered = true
+                    }
+                case .ended:
+                    withAnimation(.smooth) {
+                        hovered = false
+                    }
+            }
+        }
+        .onExitCommand(perform: {
+            withAnimation(.smooth) {
+                isExpanded = false
+            }
         })
     }
 }

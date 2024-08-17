@@ -14,7 +14,6 @@ struct NotchContentView: View {
     @EnvironmentObject var volumeChangeListener: VolumeChangeListener
     var clipboardManager: ClipboardManager?
     @StateObject var microphoneHandler: MicrophoneHandler
-    @EnvironmentObject var downloadWatcher: DownloadWatcher
     
     var body: some View {
         VStack {
@@ -206,9 +205,9 @@ struct NotchContentView: View {
                 }
             }
             
-            if vm.notchState == .open {
-                DownloadArea().padding(.vertical, 10).padding(.horizontal, 4).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.5)))).environmentObject(downloadWatcher)
-            }
+           // if vm.notchState == .open {
+                // DownloadArea().padding(.vertical, 10).padding(.horizontal, 4).transition(.blurReplace.animation(.spring(.bouncy(duration: 0.5))))
+           // }
         }
         .frame(width: calculateFrameWidthforNotchContent())
         .transition(.blurReplace.animation(.spring(.bouncy(duration: 0.5))))

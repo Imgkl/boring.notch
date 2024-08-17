@@ -61,7 +61,7 @@ struct BoringNotch: View {
             .animation(notchAnimation, value: vm.sneakPeak.show)
             .overlay {
                 NotchContentView(clipboardManager: clipboardManager, microphoneHandler: microphoneHandler)
-                    .environmentObject(DownloadWatcher(folderPath: nil, vm: vm))
+                    //.environmentObject(DownloadWatcher(folderPath: nil, vm: vm))
                     .environmentObject(vm)
                     .environmentObject(musicManager)
                     .environmentObject(batteryModel)
