@@ -159,7 +159,6 @@ class DisplayManager {
         
         displayQueue?.sync {
             DisplayServicesSetBrightness(NSScreen.main!.displayID, brightness)
-            DisplayServicesBrightnessChanged(NSScreen.main!.displayID, Double(brightness))
         }
     }
     
